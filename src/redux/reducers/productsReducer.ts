@@ -1,8 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Product from "../../types/Product";
 import axios, { AxiosError } from "axios";
-import { access } from "fs";
-
+import { UpdateSingleProduct } from "../../types/UpdateSingleProduct";
 const initialProducts: Product[] = [{
   id: 4,
   title: "Handmade Fresh Table",
@@ -41,7 +40,29 @@ const productsSlice = createSlice({
     },
     updateProduct: (state, action: PayloadAction<Product[]>) => {
       return action.payload
-    }
+    },
+    updateSingleProduct: (state, action: PayloadAction<UpdateSingleProduct>) => {
+      state.map(product => {
+        if (product.id === action.payload.id) {
+          return { ...state, ...action.payload.update }
+        }
+        return product
+      })
+    },
+    sortPrice: (state,action:PayloadAction<"asc"|"desc">) => {
+      if(action.payload === 'asc'){
+        state.sort((a,b) => a.price-b.price)
+      }else {
+        state.sort((a,b) => b.price-a.price)
+      }
+    },
+    sortByCategory: (state,action:PayloadAction<"asc"|"desc">) => {
+      if(action.payload === 'asc'){
+        state.sort((a,b) => a.category.name.localeCompare(b.category.name))
+      }else {
+        state.sort((a,b) => b.category.name.localeCompare(a.category.name))
+      }
+    },
   },
   extraReducers: (build) => {
     build.addCase(fetchAllProducts.fulfilled, (state, action) => {
@@ -54,4 +75,12 @@ const productsSlice = createSlice({
 })
 
 const productsReducer = productsSlice.reducer
+export const
+  {
+    createNewProduct,
+    updateProduct,
+    updateSingleProduct,
+    sortPrice,
+    sortByCategory
+  } = productsSlice.actions
 export default productsReducer

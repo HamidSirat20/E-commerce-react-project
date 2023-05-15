@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, Button, FormControl, FormControlLabel, FormLabel, InputLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material'
+import { Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, InputLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material'
 import useAppDispatch from '../hooks/useAppDispatch'
 import { createNewUser } from '../redux/reducers/usersReducer'
 import useAppSelector from '../hooks/useAppSelector'
+import { CheckBox } from '@mui/icons-material'
 
 const RegisterUser = () => {
     const users = useAppSelector(state => state.usersReducers)
@@ -33,11 +34,14 @@ const RegisterUser = () => {
                 <Box>
                     <FormControl component="fieldset">
                         <FormLabel component="legend" sx={{ textAlign: 'center', paddingTop: '20px' }}>Choose Your Role:</FormLabel>
-                        <RadioGroup sx={{ display: 'flex', flexDirection: 'row' }} aria-label="role" name="admin">
-                            <FormControlLabel value="admin" control={<Radio />} label="admin" />
+                        <RadioGroup sx={{ display: 'flex', flexDirection: 'row' }} aria-label="role-signup" name="admin">
+                            <FormControlLabel value="admin" control={<Radio />} label="admin"/>
                             <FormControlLabel value="customer" control={<Radio />} label="customer" />
                         </RadioGroup>
                     </FormControl>
+                </Box>
+                <Box>
+                    <FormControlLabel required label='I accept the terms and conditions' control={<Checkbox/>}></FormControlLabel>
                 </Box>
                 <Button onClick={addUser} sx={{ margin: '20px', borderRadius: '5px' }} variant='contained' color='warning'>SIGNUP</Button>
             </Box>

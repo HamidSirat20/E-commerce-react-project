@@ -1,22 +1,15 @@
-import React, { useEffect } from 'react'
-
-import useAppSelector from './hooks/useAppSelector'
-import RegisterUser from './components/RegisterUser'
-import useAppDispatch from './hooks/useAppDispatch'
-import { fetchAllProducts } from './redux/reducers/productsReducer'
+// import React, { useEffect, useState } from "react";
+// import TemplateCard from "./components/TemplateCard";
+import {ProductWithLoading} from "./components/TestProducts";
 const App = () => {
-  const products = useAppSelector(state => state.productsReducer)
-  const dispatch = useAppDispatch()
- useEffect(()=>{
- dispatch(fetchAllProducts())
- },[])
-  console.log(products)
-
   return (
     <div>
-     <RegisterUser/>
-    </div>
-  )
-}
+      <ProductWithLoading/>
+      {/* <RegisterUser /> */}
+      {/* <TemplateCard/> */}
 
-export default App
+    </div>
+  );
+};
+
+export default App;
