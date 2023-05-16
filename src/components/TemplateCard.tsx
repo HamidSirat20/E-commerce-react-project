@@ -1,80 +1,83 @@
-import React, { useEffect, useState } from "react"
-import SortRoundedIcon from "@mui/icons-material/SortRounded"
-import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded"
-import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded"
-import SortByAlphaRoundedIcon from "@mui/icons-material/SortByAlphaRounded"
+import React, { useEffect, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
 
-import useAppDispatch from "../hooks/useAppDispatch"
-import useAppSelector from "../hooks/useAppSelector"
+import useAppDispatch from "../hooks/useAppDispatch";
+import useAppSelector from "../hooks/useAppSelector";
+import ProductCard from "./ProductCard";
+import SortFilterProducts from "./SortProducts";
+import { fetchAllProducts } from "../redux/reducers/productsReducer";
 import {
-  fetchAllProducts,
-  sortPrice,
-  sortByCategory,
-} from "../redux/reducers/productsReducer"
-import ProductCard from "./ProductCard"
-
+  Box,
+  Grid,
+  InputAdornment,
+  LinearProgress,
+  TextField,
+} from "@mui/material";
+import Product from "../types/Product";
+import useDebounce from "./useDebounce";
+const filterProductByName = (products: Product[], search: string) => {
+  return products.filter((item) => item.title.toLowerCase().includes(search));
+};
 const TemplateCard = () => {
-  const [sort, setSortPrice] = useState<"asc" | "desc">("asc");
-  const [sortCategory, setsortCategory] = useState<"asc" | "desc">("asc")
-  //end sortig
-  const products = useAppSelector((state) => state.productsReducer)
-  const dispatch = useAppDispatch()
+  const products = useAppSelector((state) => state.productsReducer);
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    dispatch(fetchAllProducts())
+    dispatch(fetchAllProducts());
+    setLoading(false);
   }, []);
-  console.log(products)
-
-  const handleSort = () => {
-    dispatch(sortPrice(sort))
-    setSortPrice(sort === "asc" ? "desc" : "asc")
-  };
-
-  const handleSortCategory = () => {
-    dispatch(sortByCategory(sortCategory));
-    setsortCategory(sortCategory === "asc" ? "desc" : "asc")
-  }
+  const { onChangeFilter, filter, filteredProducts } = useDebounce<Product>(
+    filterProductByName,
+    products
+  );
   return (
-    <div>
-      <button onClick={handleSort}>
-        {sort === "asc" ? (
-          <>
-            <ArrowDropUpRoundedIcon /> <SortRoundedIcon />
-          </>
-        ) : (
-          <>
-            <ArrowDropDownRoundedIcon /> <SortRoundedIcon />
-          </>
-        )}
-      </button>
-      <button onClick={handleSortCategory}>
-        {sortCategory === "asc" ? (
-          <>
-            <ArrowDropUpRoundedIcon /> <SortByAlphaRoundedIcon />
-          </>
-        ) : (
-          <>
-            <ArrowDropDownRoundedIcon /> <SortByAlphaRoundedIcon />
-          </>
-        )}
-      </button>
-      {products.map((product) => {
-        return (
-          <ProductCard
-            id={product.id}
-            title={product.title}
-            price={product.price}
-            description={product.description}
-            category={{
-              id: product.category.id,
-              name: product.category.name,
-              image: product.category.image,
-            }}
-            images={product.images}
-          ></ProductCard>
-        )
-      })}
-    </div>
-  )
-}
+    <Box>
+      {loading && <LinearProgress />}
+      <Box sx={{ display: "flex", padding: "1rem" }}>
+        <SortFilterProducts />
+        <TextField
+          inputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+              <SearchIcon /> this text is here
+              </InputAdornment>
+            ),
+          }}
+          onChange={onChangeFilter}
+          sx={{
+            width: "40rem",
+            borderRadius: "5",
+            "& input": {
+              textAlign: "center",
+            },
+          }}
+          type="text"
+          placeholder="Search"
+          size="small"
+          variant="outlined"
+          value={filter}
+        />
+      </Box>
+      <Grid container spacing={3}>
+        {filteredProducts.map((product) => {
+          return (
+            <ProductCard
+              id={product.id}
+              title={product.title}
+              price={product.price}
+              description={product.description}
+              category={{
+                id: product.category.id,
+                name: product.category.name,
+                image: product.category.image,
+              }}
+              images={product.images}
+            ></ProductCard>
+          );
+        })}
+      </Grid>
+    </Box>
+  );
+};
 
 export default TemplateCard;

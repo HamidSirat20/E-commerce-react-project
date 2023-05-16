@@ -1,13 +1,15 @@
 // import React, { useEffect, useState } from "react";
 // import TemplateCard from "./components/TemplateCard";
-import {ProductWithLoading} from "./components/TestProducts";
+import { Container } from "@mui/material";
+import TemplateCard from "./components/TemplateCard";
 const App = () => {
   return (
     <div>
-      <ProductWithLoading/>
+      {/* <ProductWithLoading/> */}
       {/* <RegisterUser /> */}
-      {/* <TemplateCard/> */}
-
+      <Container>
+        <TemplateCard />
+      </Container>
     </div>
   );
 };
