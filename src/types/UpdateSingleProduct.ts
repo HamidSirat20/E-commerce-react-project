@@ -1,6 +1,9 @@
-import Product from "./Product"
+import Product from "./Product";
 
-export interface UpdateSingleProduct{
-    id: number
-    update: Omit<Product,"id">
+export interface UpdateSingleProduct {
+    id:number
+    update:{
+        title: string
+        price: number
+    }
 }

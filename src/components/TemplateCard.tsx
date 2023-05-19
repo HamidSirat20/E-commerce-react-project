@@ -15,11 +15,12 @@ import {
 } from "@mui/material";
 import Product from "../types/Product";
 import useDebounce from "./useDebounce";
-const filterProductByName = (products: Product[], search: string) => {
-  return products.filter((item) => item.title.toLowerCase().includes(search));
+
+const filterProductByName = (product: Product[], search: string) => {
+  return product.filter((item) => item.title.toLowerCase().includes(search));
 };
 const TemplateCard = () => {
-  const products = useAppSelector((state) => state.productsReducer);
+  const productList = useAppSelector((state) => state.productsReducer);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -28,7 +29,7 @@ const TemplateCard = () => {
   }, []);
   const { onChangeFilter, filter, filteredProducts } = useDebounce<Product>(
     filterProductByName,
-    products
+    productList.products
   );
   return (
     <Box>
@@ -39,7 +40,7 @@ const TemplateCard = () => {
           inputProps={{
             endAdornment: (
               <InputAdornment position="end">
-              <SearchIcon /> this text is here
+                <SearchIcon /> this text is here
               </InputAdornment>
             ),
           }}

@@ -3,7 +3,6 @@ import { Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, InputL
 import useAppDispatch from '../hooks/useAppDispatch'
 import { createNewUser } from '../redux/reducers/usersReducer'
 import useAppSelector from '../hooks/useAppSelector'
-import { CheckBox } from '@mui/icons-material'
 
 const RegisterUser = () => {
     const users = useAppSelector(state => state.usersReducers)

@@ -44,7 +44,7 @@ const ProductCard = (props: Product) => {
         </Typography>
       <CardActions sx={{display:'flex',flexDirection:'column'}}>
         <Button>£ {props.price}</Button>
-        <Button variant="contained">Add to Cart</Button>
+        <Button variant="outlined">Add to Cart</Button>
       </CardActions>
     </Grid>
   );

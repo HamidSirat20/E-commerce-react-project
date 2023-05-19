@@ -1,90 +1,175 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Product from "../../types/Product";
 import axios, { AxiosError } from "axios";
+
+import Product from "../../types/Product";
+import { NewProduct } from "../../types/NewProduct";
+import { UpdateBundleProject } from "typescript";
 import { UpdateSingleProduct } from "../../types/UpdateSingleProduct";
-const initialProducts: Product[] = [
-  {
-    id: 4,
-    title: "Handmade Fresh Table",
-    price: 687,
-    description: "Andy shoes are designed to keeping in...",
-    category: {
-      id: 5,
-      name: "Others",
-      image: "https://placeimg.com/640/480/any?r=0.591926261873231",
-    },
-    images: [
-      "https://placeimg.com/640/480/any?r=0.9178516507833767",
-      "https://placeimg.com/640/480/any?r=0.9300320592588625",
-      "https://placeimg.com/640/480/any?r=0.8807778235430017",
-    ],
-  },
-]; //it has an initial value for test puspose.
+
+interface RetrieveProducts {
+  loading: boolean;
+  error: string;
+  products: Product[];
+}
+const initialState: RetrieveProducts = {
+  loading: true,
+  error: "",
+  products: [],
+};
 
 export const fetchAllProducts = createAsyncThunk(
   "fetchAllProducts",
   async () => {
     try {
-      const fetchProducts = axios.get<Product[]>("https://api.escuelajs.co/api/v1/products"
-      )
+      const fetchProducts = axios.get<Product[]>(
+        "https://api.escuelajs.co/api/v1/products"
+      );
       return (await fetchProducts).data;
     } catch (e) {
       const error = e as AxiosError;
-      console.log(error.message) ;
+      return error.message;
+    }
+  }
+);
+export const createNewProducts = createAsyncThunk(
+  "createNewProducts",
+  async (product: NewProduct) => {
+    try {
+      const result = await axios.post(
+        "https://api.escuelajs.co/api/v1/products/",
+        product
+      );
+      return result.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      return error.message;
+    }
+  }
+);
+export const updateSingleProduct = createAsyncThunk(
+  "updateSingleProduct",
+  async (updateProduct: UpdateSingleProduct) => {
+    const { id, update } = updateProduct;
+    try {
+      const result = await axios.put(
+        `https://api.escuelajs.co/api/v1/products/${id}`,
+        update
+      );
+      return result.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      return error.message;
+    }
+  }
+);
+export const deleteSignleProduct = createAsyncThunk(
+  "deleteSigleProduct",
+  async (id: number) => {
+    try {
+      const result = await axios.delete(
+        `https://api.escuelajs.co/api/v1/products/${id}`
+      );
+      return result.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      return error.message;
     }
   }
 );
 const productsSlice = createSlice({
   name: "products",
-  initialState: initialProducts,
+  initialState,
   reducers: {
-    createNewProduct: (state, action: PayloadAction<Product>) => {
-      state.push(action.payload);
-    },
-    updateProduct: (_state, action: PayloadAction<Product[]>) => {
-      return action.payload;
-    },
-    updateSingleProduct: (
-      state,
-      action: PayloadAction<UpdateSingleProduct>
-    ) => {
-      state.map((product) => {
-        if (product.id === action.payload.id) {
-          return { ...state, ...action.payload.update };
-        }
-        return product;
-      });
+    emptyProductList: (state) => {
+      return initialState;
     },
     sortPrice: (state, action: PayloadAction<"asc" | "desc">) => {
       if (action.payload === "asc") {
-        state.sort((a, b) => a.price - b.price);
+        state.products.sort((a, b) => a.price - b.price);
       } else {
-        state.sort((a, b) => b.price - a.price);
+        state.products.sort((a, b) => b.price - a.price);
       }
     },
     sortByCategory: (state, action: PayloadAction<"asc" | "desc">) => {
       if (action.payload === "asc") {
-        state.sort((a, b) => a.category.name.localeCompare(b.category.name));
+        state.products.sort((a, b) =>
+          a.category.name.localeCompare(b.category.name)
+        );
       } else {
-        state.sort((a, b) => b.category.name.localeCompare(a.category.name));
+        state.products.sort((a, b) =>
+          b.category.name.localeCompare(a.category.name)
+        );
       }
     },
   },
   extraReducers: (build) => {
-    build.addCase(fetchAllProducts.fulfilled, (state, action) => {
-      if (action.payload) {
-        return action.payload;
-      }
-    });
+    build
+      .addCase(fetchAllProducts.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Cannot fetch this time, try later";
+      })
+      .addCase(fetchAllProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+        } else {
+          state.products = action.payload;
+        }
+      })
+      .addCase(createNewProducts.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(createNewProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Cannot create new product, try later";
+      })
+      .addCase(createNewProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+        } else {
+          state.products.push(action.payload);
+        }
+        state.loading = false;
+      })
+      .addCase(updateSingleProduct.pending, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateSingleProduct.rejected, (state, action) => {
+        state.loading = true;
+        state.error = "Cannot update the product now, try later";
+      })
+      .addCase(updateSingleProduct.fulfilled, (state, action) => {
+        const productList = state.products.map((product) => {
+          if (product.id === action.payload.id) {
+            return { ...product, ...action.payload.update};
+          }
+          return product;
+        });
+        return {
+          ...state,
+          productList,
+        };
+      })
+      .addCase(deleteSignleProduct.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(deleteSignleProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Cannot delete the product now, try later";
+      })
+      .addCase(deleteSignleProduct.fulfilled, (state, action) => {
+        const newProducts = state.products.filter(product=> product.id !== action.payload.id)
+        state.products=newProducts
+        state.loading=false
+      })
   },
 });
 
 const productsReducer = productsSlice.reducer;
-export const {
-  createNewProduct,
-  updateProduct,
-  updateSingleProduct,
-  sortPrice,
-  sortByCategory,
-} = productsSlice.actions;
+export const { sortPrice, sortByCategory, emptyProductList } =
+  productsSlice.actions;
 export default productsReducer;
