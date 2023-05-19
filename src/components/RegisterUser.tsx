@@ -3,11 +3,25 @@ import { Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, InputL
 import useAppDispatch from '../hooks/useAppDispatch'
 import { createNewUser } from '../redux/reducers/usersReducer'
 import useAppSelector from '../hooks/useAppSelector'
+import { UpdateSingleProduct } from '../types/UpdateSingleProduct'
+import { updateSingleProduct } from '../redux/reducers/productsReducer'
 
 const RegisterUser = () => {
     const users = useAppSelector(state => state.usersReducers)
     console.log(users)
     const dispatch = useAppDispatch()
+//     const updateProduct:UpdateSingleProduct={
+//         id:1,
+//         update:{
+//             title:'updated',
+//             price:300
+//         }
+//     }
+// const handleUpdate = () =>{
+//     dispatch(updateSingleProduct(updateProduct))
+// }
+
+
     const addUser = (e: React.MouseEvent<HTMLButtonElement>) => {
         dispatch(createNewUser({
             id: 1,

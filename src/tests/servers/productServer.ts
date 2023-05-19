@@ -16,23 +16,25 @@ const productServer = setupServer(
     const newProduct = await req.json() as NewProduct
     const category = categories.find(c=>c.id===newProduct.categoryId)
     const error:string[]=[]
-    let addedProduct:Product|null =null
-    if(!category){
-      error.push("category does not exist")
-    }else{
-      addedProduct = {
+    let addedProduct:Product = {
         title: newProduct.title,
         price: newProduct.price,
         description: newProduct.description,
         category: categoryA,
         images: newProduct.images,
         id: 6
-      }
    }
    return res(
     ctx.json(addedProduct)
    )
+  }),
+  rest.put(`https://api.escuelajs.co/api/v1/products/1}`,(req,res,ctx) =>{
+    return res(
+      ctx.json(product1)
+    )
   })
+
+
 )
 
 export default productServer

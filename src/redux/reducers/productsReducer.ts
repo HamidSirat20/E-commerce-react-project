@@ -143,16 +143,12 @@ const productsSlice = createSlice({
         state.error = "Cannot update the product now, try later";
       })
       .addCase(updateSingleProduct.fulfilled, (state, action) => {
-        const productList = state.products.map((product) => {
+        state.products.map((product) => {
           if (product.id === action.payload.id) {
-            return { ...product, ...action.payload.update};
+              return action.payload
           }
-          return product;
-        });
-        return {
-          ...state,
-          productList,
-        };
+          return product
+      })
       })
       .addCase(deleteSignleProduct.pending, (state, action) => {
         state.loading = true;
@@ -171,5 +167,5 @@ const productsSlice = createSlice({
 
 const productsReducer = productsSlice.reducer;
 export const { sortPrice, sortByCategory, emptyProductList } =
-  productsSlice.actions;
+  productsSlice.actions
 export default productsReducer;
