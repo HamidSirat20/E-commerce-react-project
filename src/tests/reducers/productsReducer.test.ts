@@ -33,7 +33,7 @@ describe("Testing the productsReducer", () => {
     });
   });
   test("Testing fetchAllProducts for correct fetching", async () => {
-    await store.dispatch(fetchAllProducts());
+    await store.dispatch(fetchAllProducts({offset:0,limit:10}));
     expect(store.getState().productsReducer.products.length).toEqual(4);
     expect(store.getState().productsReducer.error==="")
     expect(store.getState().productsReducer.loading===false)

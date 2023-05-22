@@ -26,7 +26,7 @@ const SortProducts = () => {
   };
   return (
     <Box sx={{marginRight:'1rem'}}>
-      Sort By price:<Button size="medium" variant="outlined" onClick={handleSort}>
+      <Button size="medium" variant="outlined" onClick={handleSort}>
         {sort === "asc" ? (
           <>
             <ArrowDropUpRoundedIcon /> <SortRoundedIcon />

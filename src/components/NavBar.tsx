@@ -4,6 +4,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import useAppSelector from "../hooks/useAppSelector";
 import useAppDispatch from "../hooks/useAppDispatch";
 import { toggleShoppingCart } from "../redux/reducers/cartReducer";
+import { Link, Outlet } from "react-router-dom";
 
 const NavBar = () => {
     const cartProduct = useAppSelector(state=>state.cartReducer.totalQuantity)
@@ -12,15 +13,16 @@ const NavBar = () => {
         dispatch(toggleShoppingCart())
     }
   return (
+    <>
     <AppBar>
       <Toolbar>
         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
           PrimePicks
         </Typography>
         <Stack direction="row" spacing={2}>
-          <Button color="inherit">Home</Button>
-          <Button color="inherit">Products</Button>
-          <Button color="inherit">Profile</Button>
+          <Link to='/'><Button color="inherit">Home</Button></Link>
+          <Link to='/'><Button color="inherit">Products</Button></Link>
+          <Link to='/Profile'><Button color="inherit">Profile</Button></Link>
           <IconButton onClick={handleCartToggle}>
             <ShoppingCartIcon
               fontSize="large"
@@ -36,6 +38,8 @@ const NavBar = () => {
         </Stack>
       </Toolbar>
     </AppBar>
+    <Outlet/>
+    </>
   );
 };
 

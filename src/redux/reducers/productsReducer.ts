@@ -3,7 +3,6 @@ import axios, { AxiosError } from "axios";
 
 import Product from "../../types/Product";
 import { NewProduct } from "../../types/NewProduct";
-import { UpdateBundleProject } from "typescript";
 import { UpdateSingleProduct } from "../../types/UpdateSingleProduct";
 
 interface RetrieveProducts {
@@ -16,13 +15,16 @@ const initialState: RetrieveProducts = {
   error: "",
   products: [],
 };
-
+interface Pagination {
+  offset: number
+  limit: number
+}
 export const fetchAllProducts = createAsyncThunk(
   "fetchAllProducts",
-  async () => {
+  async ({offset,limit}:Pagination) => {
     try {
       const fetchProducts = axios.get<Product[]>(
-        "https://api.escuelajs.co/api/v1/products"
+        `https://api.escuelajs.co/api/v1/products?offset=${offset}&limit=${limit}`
       );
       return (await fetchProducts).data;
     } catch (e) {
@@ -76,6 +78,7 @@ export const deleteSignleProduct = createAsyncThunk(
     }
   }
 );
+
 const productsSlice = createSlice({
   name: "products",
   initialState,

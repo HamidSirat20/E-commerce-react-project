@@ -2,10 +2,10 @@ import {
   PayloadAction,
   createAsyncThunk,
   createSlice,
-  isAction,
 } from "@reduxjs/toolkit";
 import User from "../../types/User";
 import axios, { AxiosError } from "axios";
+import { UserLogin } from "../../types/UserLogin";
 
 interface UserReducer {
   users: User[];
@@ -54,7 +54,7 @@ const usersSlice = createSlice({
       if (action.payload instanceof AxiosError) {
         state.error = action.payload.message;
       }else {
-        // state.currentUser = action.payload
+        // state.currentUser=action.payload
       }
       state.loading = true;
     });

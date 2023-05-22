@@ -9,7 +9,7 @@ import {
   Rating,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Product from "../types/Product";
 import useAppDispatch from "../hooks/useAppDispatch";
 import { addProductToCart } from "../redux/reducers/cartReducer";
@@ -18,10 +18,8 @@ import useAppSelector from "../hooks/useAppSelector";
 const ProductCard = (props: Product) => {
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.productsReducer.products);
-  const cartProducts = useAppSelector((state) => state.cartReducer.products);
-
   const addCartHandler = () => {
-    dispatch(addProductToCart({products}));
+    dispatch(addProductToCart(products));
   };
   return (
     <Grid
@@ -46,7 +44,7 @@ const ProductCard = (props: Product) => {
           sx={{ borderRadius: "10px 10px 0 0" }}
           component="img"
           height="250"
-          image={props.images[0]}
+          image={props.images[1]}
           alt="product-image"
         />
       </CardContent>

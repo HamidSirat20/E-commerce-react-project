@@ -8,6 +8,7 @@ import SortFilterProducts from "./SortProducts";
 import { fetchAllProducts } from "../redux/reducers/productsReducer";
 import {
   Box,
+  Button,
   Grid,
   InputAdornment,
   LinearProgress,
@@ -15,6 +16,7 @@ import {
 } from "@mui/material";
 import Product from "../types/Product";
 import useDebounce from "./useDebounce";
+import { inherits } from "util";
 
 const filterProductByName = (product: Product[], search: string) => {
   return product.filter((item) => item.title.toLowerCase().includes(search));
@@ -23,10 +25,15 @@ const TemplateCard = () => {
   const productList = useAppSelector((state) => state.productsReducer);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState<number>(9);
+  const handleLoad = () => {
+    setPage(page + 9);
+  };
+
   useEffect(() => {
-    dispatch(fetchAllProducts());
+    dispatch(fetchAllProducts({ offset: 0, limit: page }));
     setLoading(false);
-  }, []);
+  }, [page]);
   const { onChangeFilter, filter, filteredProducts } = useDebounce<Product>(
     filterProductByName,
     productList.products
@@ -77,6 +84,7 @@ const TemplateCard = () => {
           );
         })}
       </Grid>
+      <Button fullWidth variant="contained"  onClick={handleLoad}>Load More...</Button>
     </Box>
   );
 };

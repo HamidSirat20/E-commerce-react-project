@@ -8,9 +8,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-
-import CloseIcon from "@mui/icons-material/Close";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+
 import useAppSelector from "../hooks/useAppSelector";
 import useAppDispatch from "../hooks/useAppDispatch";
 import {
@@ -58,7 +57,6 @@ const Cart = () => {
         {cartProducts.map((product) => {
           return (
             <CardContent key={product.id}>
-
               <Typography
                 gutterBottom
                 variant="h5"
@@ -80,7 +78,8 @@ const Cart = () => {
                 <Button onClick={increaseProduct} variant="outlined">
                  +
                 </Button>
-                <Button>{product.id}</Button>
+                <Button>{product.totalPrice}</Button>
+                <Button>{product.quantity}</Button>
                 <Button onClick={decreaseProduct} variant="outlined">
                   -
                 </Button>
