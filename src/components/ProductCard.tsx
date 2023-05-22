@@ -11,8 +11,18 @@ import {
 } from "@mui/material";
 import React from "react";
 import Product from "../types/Product";
+import useAppDispatch from "../hooks/useAppDispatch";
+import { addProductToCart } from "../redux/reducers/cartReducer";
+import useAppSelector from "../hooks/useAppSelector";
 
 const ProductCard = (props: Product) => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.productsReducer.products);
+  const cartProducts = useAppSelector((state) => state.cartReducer.products);
+
+  const addCartHandler = () => {
+    dispatch(addProductToCart({products}));
+  };
   return (
     <Grid
       item
@@ -23,28 +33,34 @@ const ProductCard = (props: Product) => {
       spacing={3}
       sx={{
         ":hover": {
-          boxShadow: "10px 10px 10px 10px #ccc",alignItems:'center',display:'flex',flexDirection:'column',justifyContent:'center'
+          boxShadow: "10px 10px 10px 10px #ccc",
+          alignItems: "center",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         },
       }}
     >
       <CardContent>
         <CardMedia
-          sx={{ borderRadius: "10px 10px 0 0"}}
+          sx={{ borderRadius: "10px 10px 0 0" }}
           component="img"
           height="250"
-          image={props.images[2]}
+          image={props.images[0]}
           alt="product-image"
         />
       </CardContent>
-      <Typography gutterBottom variant="h5" textAlign='center' component="h5">
-          {props.title}
-        </Typography>
-        <Typography variant="subtitle2" textAlign='center' color="text.secondary">
-          {props.description}
-        </Typography>
-      <CardActions sx={{display:'flex',flexDirection:'column'}}>
+      <Typography gutterBottom variant="h5" textAlign="center" component="h5">
+        {props.title}
+      </Typography>
+      <Typography variant="subtitle2" textAlign="center" color="text.secondary">
+        {props.description}
+      </Typography>
+      <CardActions sx={{ display: "flex", flexDirection: "column" }}>
         <Button>£ {props.price}</Button>
-        <Button variant="outlined">Add to Cart</Button>
+        <Button onClick={addCartHandler} variant="outlined">
+          Add to Cart
+        </Button>
       </CardActions>
     </Grid>
   );

@@ -32,7 +32,7 @@ const TemplateCard = () => {
     productList.products
   );
   return (
-    <Box>
+    <Box paddingTop={10}>
       {loading && <LinearProgress />}
       <Box sx={{ display: "flex", padding: "1rem" }}>
         <SortFilterProducts />

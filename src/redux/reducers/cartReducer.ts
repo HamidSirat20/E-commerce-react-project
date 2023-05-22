@@ -2,23 +2,23 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import Product from "../../types/Product";
 import { Category } from "@mui/icons-material";
 
-interface CartProduct {
+export interface CartProduct {
   quantity: number;
-  totalPrice:number
+  totalPrice: number;
   id: number;
   title: string;
   price: number;
   description: string;
   images: string[];
 }
-interface Cart {
+export interface Cart {
   cartIsVisible: boolean;
   products: CartProduct[];
-  totalQuantity:number
+  totalQuantity: number;
 }
 const initialState: Cart = {
   cartIsVisible: false,
-  totalQuantity:0,
+  totalQuantity: 0,
   products: [],
 };
 const cartSlice = createSlice({
@@ -33,7 +33,7 @@ const cartSlice = createSlice({
       const existingProduct = state.products.find(
         (c) => c.id === newProduct.id
       );
-      state.totalQuantity++
+      state.totalQuantity++;
       if (!existingProduct) {
         state.products.push({
           quantity: 0,
@@ -42,30 +42,32 @@ const cartSlice = createSlice({
           price: newProduct.price,
           description: newProduct.description,
           images: newProduct.images,
-          totalPrice:newProduct.price
+          totalPrice: newProduct.price,
         });
       } else {
-        existingProduct.quantity++
-        existingProduct.totalPrice=existingProduct.price + newProduct.price
+        existingProduct.quantity++;
+        existingProduct.totalPrice = existingProduct.price + newProduct.price;
       }
     },
-    removeProductFromCart:(state,action) => {
-        const id = action.payload
-        const existingProduct = state.products.find( c => c.id===id);
-        state.totalQuantity--
-        if(existingProduct?.quantity===1){
-            state.products = state.products.filter(product=>product.id !==id)
-        }else if(existingProduct?.quantity !==undefined){
-           existingProduct.quantity--
-           existingProduct.totalPrice = existingProduct.totalPrice - existingProduct.price
-        }
+    removeProductFromCart: (state, action) => {
+      const id = action.payload;
+      const existingProduct = state.products.find((c) => c.id === id);
+      state.totalQuantity--;
+      if (existingProduct?.quantity === 1) {
+        state.products = state.products.filter((product) => product.id !== id);
+      } else if (existingProduct?.quantity !== undefined) {
+        existingProduct.quantity--;
+        existingProduct.totalPrice =
+          existingProduct.totalPrice - existingProduct.price;
+      }
     },
-    clearCart:(state) => {
-      state.products = []
-    }
+    clearCart: (state) => {
+      state.products = [];
+    },
   },
 });
 
 const cartReducer = cartSlice.reducer;
-const { toggleShoppingCart,addProductToCart,removeProductFromCart } = cartSlice.actions;
+export const { toggleShoppingCart, addProductToCart, removeProductFromCart } =
+  cartSlice.actions;
 export default cartReducer;
