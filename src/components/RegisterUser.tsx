@@ -20,7 +20,6 @@ import { updateSingleProduct } from "../redux/reducers/productsReducer";
 
 const RegisterUser = () => {
   const users = useAppSelector((state) => state.usersReducers);
-  console.log(users);
   const dispatch = useAppDispatch();
   const addUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
@@ -131,6 +130,4 @@ const RegisterUser = () => {
 
 export default RegisterUser;
 
-function useForm(): { register: any } {
-  throw new Error("Function not implemented.");
-}
+

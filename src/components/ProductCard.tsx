@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  FormControl,
   Grid,
   Rating,
   Typography,
@@ -16,10 +17,11 @@ import { addProductToCart } from "../redux/reducers/cartReducer";
 import useAppSelector from "../hooks/useAppSelector";
 
 const ProductCard = (props: Product) => {
+  const [cartItem, setCartItem] = useState([]);
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.productsReducer.products);
   const addCartHandler = () => {
-    dispatch(addProductToCart(products));
+    setCartItem();
   };
   return (
     <Grid
@@ -39,27 +41,33 @@ const ProductCard = (props: Product) => {
         },
       }}
     >
-      <CardContent>
-        <CardMedia
-          sx={{ borderRadius: "10px 10px 0 0" }}
-          component="img"
-          height="250"
-          image={props.images[1]}
-          alt="product-image"
-        />
-      </CardContent>
-      <Typography gutterBottom variant="h5" textAlign="center" component="h5">
-        {props.title}
-      </Typography>
-      <Typography variant="subtitle2" textAlign="center" color="text.secondary">
-        {props.description}
-      </Typography>
-      <CardActions sx={{ display: "flex", flexDirection: "column" }}>
-        <Button>£ {props.price}</Button>
-        <Button onClick={addCartHandler} variant="outlined">
-          Add to Cart
-        </Button>
-      </CardActions>
+      <FormControl component='form'>
+        <CardContent>
+          <CardMedia
+            sx={{ borderRadius: "10px 10px 0 0" }}
+            component="img"
+            height="250"
+            image={props.images[1]}
+            alt="product-image"
+          />
+        </CardContent>
+        <Typography gutterBottom variant="h5" textAlign="center" component="h5">
+          {props.title}
+        </Typography>
+        <Typography
+          variant="subtitle2"
+          textAlign="center"
+          color="text.secondary"
+        >
+          {props.description}
+        </Typography>
+        <CardActions sx={{ display: "flex", flexDirection: "column" }}>
+          <Button>£ {props.price}</Button>
+          <Button onClick={addCartHandler} variant="outlined">
+            Add to Cart
+          </Button>
+        </CardActions>
+      </FormControl>
     </Grid>
   );
 };

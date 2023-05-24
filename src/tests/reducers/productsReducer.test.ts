@@ -56,7 +56,7 @@ describe("Testing the productsReducer", () => {
   // })
   test("Should update available product",async () => {
     // await store.dispatch(fetchAllProducts())
-    console.log("product list is",store.getState().productsReducer.products)
+    // console.log("product list is",store.getState().productsReducer.products)
     await store.dispatch(updateSingleProduct({
         id:1,
         update:{

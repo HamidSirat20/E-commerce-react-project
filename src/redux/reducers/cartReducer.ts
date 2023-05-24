@@ -4,22 +4,17 @@ import { Category } from "@mui/icons-material";
 
 export interface CartProduct {
   quantity: number;
-  totalPrice: number;
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  images: string[];
-}
-export interface Cart {
   cartIsVisible: boolean;
-  products: CartProduct[];
-  totalQuantity: number;
+  products: Product[];
+  totalQuantity:number
 }
-const initialState: Cart = {
+
+const initialState: CartProduct = {
   cartIsVisible: false,
-  totalQuantity: 0,
+  totalQuantity:0,
   products: [],
+  quantity:0,
+
 };
 const cartSlice = createSlice({
   name: "cart",
@@ -30,32 +25,32 @@ const cartSlice = createSlice({
     },
     addProductToCart: (state, action) => {
       const newProduct = action.payload;
-      const existingProduct = state.products.find((item) => item.id === newProduct.id);
+      const existingProduct = state.products.find(
+        (item) => item.id === newProduct.id
+      );
       state.totalQuantity++;
       if (!existingProduct) {
-        state.products.push({
-          quantity: 1,
-          id: newProduct.id,
-          title: newProduct.title,
-          price: newProduct.price,
-          description: newProduct.description,
-          images: newProduct.images,
-          totalPrice: newProduct.price,
-        });
-      } else {
-        existingProduct.quantity++;
-        existingProduct.totalPrice = existingProduct.price + newProduct.price;
+        const newItem = {...action.payload,quantity:1}
+        state.products.push(newItem)
+        console.log(newItem)
       }
+      // else {
+      //   existingProduct.quantity =;
+      //   existingProduct.totalPrice = existingProduct.price + newProduct.price;
+      // }
     },
     removeProductFromCart: (state, action) => {
       const id = action.payload;
-      const existingProduct:CartProduct|undefined = state.products.find(item => item.id === id);
+      const existingProduct = state.products.find(
+        (item) => item.id === id
+      );
       state.totalQuantity--;
-      if (existingProduct?.quantity === 1) {
+      if (existingProduct?.price === 1) {
         state.products = state.products.filter((product) => product.id !== id);
-      }else if (existingProduct?. quantity !== undefined){
-        existingProduct.quantity--;
-        existingProduct.totalPrice = existingProduct.totalPrice - existingProduct.price;
+      } else if (existingProduct?.price !== undefined) {
+        existingProduct.price--;
+        existingProduct.price =
+          existingProduct.price - existingProduct.price;
       }
     },
     clearCart: (state) => {

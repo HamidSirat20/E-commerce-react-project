@@ -15,8 +15,8 @@ import {
   TextField,
 } from "@mui/material";
 import Product from "../types/Product";
-import useDebounce from "./useDebounce";
-import { inherits } from "util";
+import useDebounce from "../hooks/useDebounce";
+
 
 const filterProductByName = (product: Product[], search: string) => {
   return product.filter((item) => item.title.toLowerCase().includes(search));

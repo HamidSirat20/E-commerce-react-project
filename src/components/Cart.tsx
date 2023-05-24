@@ -21,7 +21,7 @@ import {
 const Cart = () => {
   const toggle = useAppSelector((state) => state.cartReducer.cartIsVisible);
   const cartProducts = useAppSelector((state) => state.cartReducer.products);
-  console.log(cartProducts)
+  // console.log(cartProducts)
   const dispatch = useAppDispatch();
   const handleCartToggle = () => {
     dispatch(toggleShoppingCart());
@@ -78,8 +78,6 @@ const Cart = () => {
                 <Button onClick={increaseProduct} variant="outlined">
                  +
                 </Button>
-                <Button>{product.totalPrice}</Button>
-                <Button>{product.quantity}</Button>
                 <Button onClick={decreaseProduct} variant="outlined">
                   -
                 </Button>
