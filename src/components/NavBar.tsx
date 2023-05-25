@@ -8,7 +8,10 @@ import { isCartVisible } from "../redux/reducers/drawerReducer";
 
 const NavBar = () => {
   const toggle = useAppSelector(state=>state.drawerReducer.isCartVisible)
-    const cartProduct = useAppSelector(state=>state.cartReducer)
+    const cartProduct = useAppSelector(state=>state.cartReducer.cartItems)
+    const totalQuantity = cartProduct.reduce((accumulator, currentProduct) => {
+      return accumulator + currentProduct.quantity;
+    }, 0);
     const dispatch = useAppDispatch()
     const handleCartToggle = () => {
       dispatch(isCartVisible())
@@ -35,7 +38,7 @@ const NavBar = () => {
             <Typography sx={{
             background:'orange',borderRadius:'50%',
             width:'40px',
-          }}></Typography>
+          }}>{totalQuantity}</Typography>
           </IconButton>
         </Stack>
       </Toolbar>
