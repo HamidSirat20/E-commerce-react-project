@@ -11,6 +11,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  CircularProgress,
   FormControl,
   Grid,
   InputAdornment,
@@ -27,8 +28,8 @@ const filterProductByName = (product: Product[], search: string) => {
 };
 const TemplateCard = () => {
   const productList = useAppSelector((state) => state.productsReducer);
+  const { loading, error } = useAppSelector((state) => state.productsReducer);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState<number>(9);
   const handleLoad = () => {
     setPage(page + 9);
@@ -36,7 +37,6 @@ const TemplateCard = () => {
 
   useEffect(() => {
     dispatch(fetchAllProducts({ offset: 0, limit: page }));
-    setLoading(false);
   }, [page]);
   const { onChangeFilter, filter, filteredProducts } = useDebounce<Product>(
     filterProductByName,
@@ -45,9 +45,15 @@ const TemplateCard = () => {
   const handleAddToCart = (cartItem: CartItem) => {
     dispatch(addToCart(cartItem));
   };
+  if (loading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography variant="body1">{error}</Typography>;
+  }
   return (
     <Box paddingTop={10}>
-      {loading && <LinearProgress />}
       <Box sx={{ display: "flex", padding: "1rem" }}>
         <SortFilterProducts />
         <TextField
@@ -77,7 +83,7 @@ const TemplateCard = () => {
         {filteredProducts.map((product) => {
           return (
             <Grid
-            key={product.id}
+              key={product.id}
               item
               xs={12}
               sm={4}
@@ -121,7 +127,18 @@ const TemplateCard = () => {
                 </Typography>
                 <CardActions sx={{ display: "flex", flexDirection: "column" }}>
                   <Button>£ {product.price}</Button>
-                  <Button onClick={() => handleAddToCart({product,quantity:1,totalPrice:product.price})} variant="outlined">Add to Cart</Button>
+                  <Button
+                    onClick={() =>
+                      handleAddToCart({
+                        product,
+                        quantity: 1,
+                        totalPrice: product.price,
+                      })
+                    }
+                    variant="outlined"
+                  >
+                    Add to Cart
+                  </Button>
                 </CardActions>
               </FormControl>
             </Grid>
@@ -136,6 +153,8 @@ const TemplateCard = () => {
       >
         Load More...
       </Button>
+      {loading && <CircularProgress />}
+      {error && <Typography variant="body1">{error}</Typography>}
     </Box>
   );
 };

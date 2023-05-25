@@ -13,35 +13,43 @@ import LogIn from "./components/LogIn";
 import UsersList from "./components/UsersList";
 import CreateUser from "./components/CreateUser";
 import UpdateUser from "./components/UpdateUser";
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <NavBar/>,
-    children:[
-      {
-        path: "/",
-        element:  <Container><Main></Main> </Container>
-        ,
-      },
-      {
-        path:'/Profile',
-        element: <Stack margin='auto 0' marginTop={10}>
-          <RegisterUser></RegisterUser>
-          <LogIn></LogIn> <UsersList></UsersList>
-          {/* <CreateUser></CreateUser> */}
-          <UpdateUser></UpdateUser>
-          </Stack>
-      },
-      {
-        path:"/products",
-        element:<Container><TemplateCard></TemplateCard></Container>
-      },
-    ],
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <NavBar/>,
+//     children:[
+//       {
+//         path: "/",
+//         element:  <Container><Main></Main> </Container>
+//         ,
+//       },
+//       {
+//         path:'/Profile',
+//         element: <Stack margin='auto 0' marginTop={10}>
+//           <RegisterUser></RegisterUser>
+//           <LogIn></LogIn> <UsersList></UsersList>
+//           {/* <CreateUser></CreateUser> */}
+//           <UpdateUser></UpdateUser>
+//           </Stack>
+//       },
+//       {
+//         path:"/products",
+//         element:<Container><TemplateCard></TemplateCard></Container>
+//       },
+//     ],
+//   },
+// ]);
 const App = () => {
   return (
-    <RouterProvider router={router}></RouterProvider>
+    // <RouterProvider router={router}></RouterProvider>
+    <Routes>
+      <Route path="/" element={<NavBar/>}>
+        <Route path="/" element={<WelcomeSlider></WelcomeSlider>}></Route>
+
+      </Route>
+    </Routes>
+
+
 
     // <div>
     //   {/* <ProductWithLoading/>  */}
