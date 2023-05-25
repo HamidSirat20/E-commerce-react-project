@@ -1,65 +1,54 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import Product from "../../types/Product";
-import { Category } from "@mui/icons-material";
 
-export interface CartProduct {
+export interface CartItem {
   quantity: number;
-  cartIsVisible: boolean;
-  products: Product[];
-  totalQuantity:number
+  product: Product;
+  totalPrice: number;
 }
 
-const initialState: CartProduct = {
-  cartIsVisible: false,
-  totalQuantity:0,
-  products: [],
-  quantity:0,
-
+const initialState: {
+  cartItems: CartItem[];
+} = {
+  cartItems: [],
 };
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    toggleShoppingCart: (state) => {
-      state.cartIsVisible = !state.cartIsVisible;
-    },
-    addProductToCart: (state, action) => {
-      const newProduct = action.payload;
-      const existingProduct = state.products.find(
-        (item) => item.id === newProduct.id
+    addToCart: (state, action: PayloadAction<CartItem>) => {
+      const cartItem = state.cartItems.find(
+        (item) => item.product.id === action.payload.product.id
       );
-      state.totalQuantity++;
-      if (!existingProduct) {
-        const newItem = {...action.payload,quantity:1}
-        state.products.push(newItem)
-        console.log(newItem)
-      }
-      // else {
-      //   existingProduct.quantity =;
-      //   existingProduct.totalPrice = existingProduct.price + newProduct.price;
-      // }
-    },
-    removeProductFromCart: (state, action) => {
-      const id = action.payload;
-      const existingProduct = state.products.find(
-        (item) => item.id === id
-      );
-      state.totalQuantity--;
-      if (existingProduct?.price === 1) {
-        state.products = state.products.filter((product) => product.id !== id);
-      } else if (existingProduct?.price !== undefined) {
-        existingProduct.price--;
-        existingProduct.price =
-          existingProduct.price - existingProduct.price;
+      if (cartItem) {
+        cartItem.quantity++;
+        cartItem.totalPrice =
+        cartItem.totalPrice + action.payload.product.price;
+      } else {
+        state.cartItems.push(action.payload);
       }
     },
-    clearCart: (state) => {
-      state.products = [];
+    removeFromCart: (state, action: PayloadAction<CartItem>) => {
+
+      try {
+        const existingProduct = state.cartItems.find(
+          (product) => product.product.id === action.payload.product.id
+        );
+       if(existingProduct?.quantity===1){
+        const newProducts = state.cartItems.filter(
+          (product) => product.product.id !== action.payload.product.id
+        );
+        state.cartItems = newProducts
+
+
+       }
+      } catch (e) {}
+
     },
   },
 });
 
+export const { addToCart } = cartSlice.actions;
 const cartReducer = cartSlice.reducer;
-export const { toggleShoppingCart, addProductToCart, removeProductFromCart } =
-  cartSlice.actions;
 export default cartReducer;

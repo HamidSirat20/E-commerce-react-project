@@ -3,20 +3,24 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import useAppDispatch from "../hooks/useAppDispatch";
 import useAppSelector from "../hooks/useAppSelector";
-import ProductCard from "./ProductCard";
 import SortFilterProducts from "./SortProducts";
 import { fetchAllProducts } from "../redux/reducers/productsReducer";
 import {
   Box,
   Button,
+  CardActions,
+  CardContent,
+  CardMedia,
+  FormControl,
   Grid,
   InputAdornment,
   LinearProgress,
   TextField,
+  Typography,
 } from "@mui/material";
 import Product from "../types/Product";
 import useDebounce from "../hooks/useDebounce";
-
+import { CartItem, addToCart } from "../redux/reducers/cartReducer";
 
 const filterProductByName = (product: Product[], search: string) => {
   return product.filter((item) => item.title.toLowerCase().includes(search));
@@ -38,6 +42,9 @@ const TemplateCard = () => {
     filterProductByName,
     productList.products
   );
+  const handleAddToCart = (cartItem: CartItem) => {
+    dispatch(addToCart(cartItem));
+  };
   return (
     <Box paddingTop={10}>
       {loading && <LinearProgress />}
@@ -69,22 +76,66 @@ const TemplateCard = () => {
       <Grid container spacing={3}>
         {filteredProducts.map((product) => {
           return (
-            <ProductCard
-              id={product.id}
-              title={product.title}
-              price={product.price}
-              description={product.description}
-              category={{
-                id: product.category.id,
-                name: product.category.name,
-                image: product.category.image,
+            <Grid
+            key={product.id}
+              item
+              xs={12}
+              sm={4}
+              md={3}
+              margin={3}
+              spacing={3}
+              sx={{
+                ":hover": {
+                  boxShadow: "10px 10px 10px 10px #ccc",
+                  alignItems: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                },
               }}
-              images={product.images}
-            ></ProductCard>
+            >
+              <FormControl component="form">
+                <CardContent>
+                  <CardMedia
+                    sx={{ borderRadius: "10px 10px 0 0" }}
+                    component="img"
+                    height="250"
+                    image={product.images[1]}
+                    alt="product-image"
+                  />
+                </CardContent>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  textAlign="center"
+                  component="h5"
+                >
+                  {product.title}
+                </Typography>
+                <Typography
+                  variant="subtitle2"
+                  textAlign="center"
+                  color="text.secondary"
+                >
+                  {product.description}
+                </Typography>
+                <CardActions sx={{ display: "flex", flexDirection: "column" }}>
+                  <Button>£ {product.price}</Button>
+                  <Button onClick={() => handleAddToCart({product,quantity:1,totalPrice:product.price})} variant="outlined">Add to Cart</Button>
+                </CardActions>
+              </FormControl>
+            </Grid>
           );
         })}
       </Grid>
-      <Button fullWidth variant="contained"  onClick={handleLoad}>Load More...</Button>
+      <Button
+        sx={{ marginY: "4rem" }}
+        fullWidth
+        variant="contained"
+        onClick={handleLoad}
+      >
+        Load More...
+      </Button>
     </Box>
   );
 };

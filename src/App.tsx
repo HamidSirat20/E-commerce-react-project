@@ -5,8 +5,10 @@ import TemplateCard from "./components/TemplateCard";
 import RegisterUser from "./components/RegisterUser";
 import Cart from "./components/Cart";
 import NavBar from "./components/NavBar";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ProductCard from "./components/ProductCard";
+import { BrowserRouter, createBrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";
+import WelcomeSlider from "./components/WelcomeSlider";
+import NavigateCategories from "./components/NavigateCategories";
+import Main from "./components/Main";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -14,12 +16,16 @@ const router = createBrowserRouter([
     children:[
       {
         path: "/",
-        element:  <Container><TemplateCard /> <Cart/></Container>
+        element:  <Container><Main></Main> </Container>
         ,
       },
       {
         path:'/Profile',
-        element: <Stack margin='auto 0' marginTop={10}><RegisterUser/></Stack>
+        element: <Stack margin='auto 0' marginTop={10}><RegisterUser></RegisterUser></Stack>
+      },
+      {
+        path:"/products",
+        element:<Container><TemplateCard></TemplateCard></Container>
       }
     ],
   },
@@ -27,6 +33,7 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <RouterProvider router={router}></RouterProvider>
+
     // <div>
     //   {/* <ProductWithLoading/>  */}
     //   {/* {<RegisterUser /> } */}

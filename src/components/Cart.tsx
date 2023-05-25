@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Box,
   Button,
   CardActions,
   CardContent,
   CardMedia,
+  Divider,
   Drawer,
+  Grid,
   Stack,
   Typography,
 } from "@mui/material";
@@ -12,26 +15,21 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 
 import useAppSelector from "../hooks/useAppSelector";
 import useAppDispatch from "../hooks/useAppDispatch";
-import {
-  addProductToCart,
-  removeProductFromCart,
-  toggleShoppingCart,
-} from "../redux/reducers/cartReducer";
+import { isCartVisible } from "../redux/reducers/drawerReducer";
+import { CartItem } from "../redux/reducers/cartReducer";
+import Product from "../types/Product";
 
 const Cart = () => {
-  const toggle = useAppSelector((state) => state.cartReducer.cartIsVisible);
-  const cartProducts = useAppSelector((state) => state.cartReducer.products);
-  // console.log(cartProducts)
+  const toggle = useAppSelector((state) => state.drawerReducer.isCartVisible);
+  const cartProducts = useAppSelector((state) => state.cartReducer.cartItems);
   const dispatch = useAppDispatch();
   const handleCartToggle = () => {
-    dispatch(toggleShoppingCart());
+    dispatch(isCartVisible());
   };
-  const increaseProduct = () => {
-    dispatch(addProductToCart(cartProducts));
-  };
-  const decreaseProduct = () => {
-    dispatch(removeProductFromCart(cartProducts));
-  };
+  const handleRemoveFromCart = (cartItem:CartItem) =>{
+    dispatch(removeFromCart(cartItem))
+  }
+
   return (
     <Drawer
       open={toggle}
@@ -52,42 +50,56 @@ const Cart = () => {
           },
         }}
       ></ClearOutlinedIcon>
-      <Typography>My Shopping Cart</Typography>
+      <Typography textAlign='center' fontWeight='bold'>Your Shopping Cart</Typography>
+      <Divider orientation="horizontal" />
       <Stack>
-        {cartProducts.map((product) => {
-          return (
-            <CardContent key={product.id}>
-              <Typography
-                gutterBottom
-                variant="h5"
-                textAlign="center"
-                component="h5"
-              >
-                {product.title}
-              </Typography>
-              <Typography
-                gutterBottom
-                variant="h5"
-                textAlign="center"
-                component="h5"
-              >
-                {product.description}
-              </Typography>
-              <CardActions sx={{ display: "flex", flexDirection: "column" }}>
-                <Button>£ {product.price}</Button>
-                <Button onClick={increaseProduct} variant="outlined">
-                 +
-                </Button>
-                <Button onClick={decreaseProduct} variant="outlined">
-                  -
-                </Button>
-              </CardActions>
-            </CardContent>
-          );
-        })}
+        <Grid>
+          {cartProducts.map((product) => {
+            return (
+              <CardContent key={product.product.id} sx={{display:'flex'}}>
+                <CardMedia
+                  sx={{ borderRadius: "10px" }}
+                  component="img"
+                  height="100"
+                  style={{ width: "100px" }}
+                  image={product.product.images[0]}
+                  alt="product-image"
+                />
+                <Box margin={1} textAlign="left" >
+                  <Typography
+                    fontSize="10"
+                    component="h6"
+                  >
+                    {product.product.title}
+                  </Typography>
+                  <Typography
+                    fontSize="8"
+                    component="div"
+                  >
+                    Category: {product.product.category.name}
+                  </Typography>
+                  <Typography fontSize="bold">
+                    Price: £ {product.product.price}
+                  </Typography>
+                  <Typography fontWeight='bold'> Total: {product.totalPrice}</Typography>
+                  <Button onClick={() => handleRemoveFromCart(product)}>Remove Product</Button>
+                </Box>
+                <CardActions sx={{ display: "flex", flexDirection: "column" }}>
+                  <Button variant="outlined">+</Button>
+                  <Typography>{product.quantity}</Typography>
+                  <Button variant="outlined">-</Button>
+                </CardActions>
+              </CardContent>
+            );
+          })}
+        </Grid>
       </Stack>
     </Drawer>
   );
 };
 
 export default Cart;
+function removeFromCart(cartItem: CartItem): any {
+  throw new Error("Function not implemented.");
+}
+
