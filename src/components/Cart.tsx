@@ -128,7 +128,7 @@ const Cart = () => {
         </Grid>
       </Stack>
       {cartProducts.length===0?<Box margin={2} textAlign='center'>Your Cart is Empty</Box>:<Button sx={{backgroundColor:'orange'}} variant="contained" fullWidth onClick={clearAllProduct}>Clear Cart</Button>}
-      <Stack sx={{
+      {cartProducts.length ===0?"":<Stack sx={{
         borderTop:'2px solid black',
         borderBottom:'2px solid black',
         margin:'20px'
@@ -139,7 +139,7 @@ const Cart = () => {
           <Typography>Shipment: £ {29}</Typography>
           <Typography>Tax: £ {total*0.1}</Typography>
           <Typography fontWeight='bold'>Order Total: £ {total+total*0.2+29}</Typography>
-        </Stack>
+        </Stack>}
     </Drawer>
   );
 };

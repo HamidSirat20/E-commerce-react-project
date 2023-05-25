@@ -13,17 +13,22 @@ import {
   Typography,
 } from "@mui/material";
 import useAppDispatch from "../hooks/useAppDispatch";
-import { createNewUser } from "../redux/reducers/usersReducer";
+import { createNewUsers } from "../redux/reducers/usersReducer";
 import useAppSelector from "../hooks/useAppSelector";
 import { UpdateSingleProduct } from "../types/UpdateSingleProduct";
 import { updateSingleProduct } from "../redux/reducers/productsReducer";
 
 const LogIn = () => {
+const Login = {
+    email:'',
+    password:'',
+    image:'n'
+}
   const users = useAppSelector((state) => state.usersReducers);
   const dispatch = useAppDispatch();
   const addUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
-      createNewUser({
+      createNewUsers({
         id: 1,
         email: "hamid@gmail.com",
         password: "string",
@@ -52,15 +57,8 @@ const LogIn = () => {
           }}
         >
           <Typography variant="h4" padding={3} textAlign="center">
-            Register
+            Login
           </Typography>
-          <TextField
-            type="text"
-            margin="dense"
-            variant="outlined"
-            label="Name"
-            required
-          />
           <TextField
             type="email"
             margin="dense"
@@ -75,38 +73,7 @@ const LogIn = () => {
             label="Password"
             required
           />
-          <TextField
-            type="password"
-            margin="normal"
-            variant="outlined"
-            label="Confirm Passoword"
-            required
-          />
           <Box>
-            <FormControl component="fieldset">
-              <FormLabel
-                component="legend"
-                sx={{ textAlign: "center", paddingTop: "20px" }}
-              >
-                Choose Your Role:
-              </FormLabel>
-              <RadioGroup
-                sx={{ display: "flex", flexDirection: "row" }}
-                aria-label="role-signup"
-                name="admin"
-              >
-                <FormControlLabel
-                  value="admin"
-                  control={<Radio />}
-                  label="admin"
-                />
-                <FormControlLabel
-                  value="customer"
-                  control={<Radio />}
-                  label="customer"
-                />
-              </RadioGroup>
-            </FormControl>
           </Box>
           <Box>
             <FormControlLabel

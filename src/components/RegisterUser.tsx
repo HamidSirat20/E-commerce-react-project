@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import useAppDispatch from "../hooks/useAppDispatch";
-import { createNewUser } from "../redux/reducers/usersReducer";
+import { createNewUsers } from "../redux/reducers/usersReducer";
 import useAppSelector from "../hooks/useAppSelector";
 import { UpdateSingleProduct } from "../types/UpdateSingleProduct";
 import { updateSingleProduct } from "../redux/reducers/productsReducer";
@@ -23,7 +23,7 @@ const RegisterUser = () => {
   const dispatch = useAppDispatch();
   const addUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(
-      createNewUser({
+      createNewUsers({
         id: 1,
         email: "hamid@gmail.com",
         password: "string",
