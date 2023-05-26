@@ -1,5 +1,7 @@
-import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
 import { sliderData } from "../../tests/data/sliderData/sliderData";
+
 export interface Slider {
 value: number
 length: number

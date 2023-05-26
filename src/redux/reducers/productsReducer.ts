@@ -78,7 +78,6 @@ export const deleteSignleProduct = createAsyncThunk(
     }
   }
 );
-
 const productsSlice = createSlice({
   name: "products",
   initialState,

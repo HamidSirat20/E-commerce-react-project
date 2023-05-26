@@ -6,7 +6,6 @@ interface Product {
         category: Category
         images: string[]
 }
-
 export interface Category {
     id: number
     name: string

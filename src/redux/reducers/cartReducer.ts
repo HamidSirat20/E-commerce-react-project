@@ -6,13 +6,11 @@ export interface CartItem {
   product: Product;
   totalPrice: number;
 }
-
 const initialState: {
   cartItems: CartItem[];
 } = {
   cartItems: [],
 };
-
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -39,14 +37,12 @@ const cartSlice = createSlice({
           (product) => product.product.id !== action.payload.product.id
         );
       }
-
       return state;
     },
     decreaseAmount: (state, action: PayloadAction<CartItem>) => {
       const cartItem = state.cartItems.find(
         (item) => item.product.id === action.payload.product.id
       );
-
       if (cartItem?.quantity === 1) {
         state.cartItems = state.cartItems.filter(
           (product) => product.product.id !== action.payload.product.id
@@ -55,19 +51,16 @@ const cartSlice = createSlice({
         cartItem.quantity--;
         cartItem.totalPrice -= action.payload.product.price;
       }
-
       return state;
     },
     increaseAmount: (state, action: PayloadAction<CartItem>) => {
       const cartItem = state.cartItems.find(
         (item) => item.product.id === action.payload.product.id
       );
-
       if (cartItem) {
         cartItem.quantity++;
         cartItem.totalPrice += action.payload.product.price;
       }
-
       return state;
     },
     clearCart: (state) => {

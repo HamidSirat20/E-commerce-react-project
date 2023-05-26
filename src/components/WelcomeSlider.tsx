@@ -1,6 +1,7 @@
 import { Box, Button, CardMedia, Stack, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { SvgIcon } from "@mui/material";
+
 import {
   nextSlide,
   previouSlide,
@@ -9,9 +10,8 @@ import {
 import useAppDispatch from "../hooks/useAppDispatch";
 import useAppSelector from "../hooks/useAppSelector";
 import { sliderData } from "../tests/data/sliderData/sliderData";
+import Cart from "./Cart";
 
-import { relative } from "path";
-import NavigateCategories from "./NavigateCategories";
 const WelcomeSlider = () => {
   const slideIndex = useAppSelector((state) => state.sliderReducer.value);
   const dispatch = useAppDispatch();
@@ -25,7 +25,6 @@ const WelcomeSlider = () => {
     const interval = setInterval(() => {
       dispatch(nextSlide(slideIndex + 1));
     }, 3000);
-
     return () => {
       clearInterval(interval);
     };
@@ -176,7 +175,7 @@ const WelcomeSlider = () => {
           </SvgIcon>
         </Button>
       </Box>
-      <NavigateCategories></NavigateCategories>
+      <Cart></Cart>
     </>
   );
 };

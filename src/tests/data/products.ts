@@ -2,7 +2,6 @@ import { NewProduct } from "../../types/NewProduct"
 import Product from "../../types/Product"
 import { categoryA, categoryB, categoryC } from "./category"
 
-
 const product1: Product = {
     title: "product 1",
     price: 100,
@@ -11,7 +10,6 @@ const product1: Product = {
     id: 1,
     category: categoryA
 }
-
 const product2:Product={
     title: "product 2",
     price: 200,
@@ -20,7 +18,6 @@ const product2:Product={
     id: 2,
     category: categoryB
 }
-
 const product3:Product={
     title: "product 3",
     price: 300,

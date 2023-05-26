@@ -1,7 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import User, { CreateNewUser, UpdateNewUser } from "../../types/User";
 import axios, { AxiosError } from "axios";
+
 import { UserLogin } from "../../types/UserLogin";
+import User, { CreateNewUser, UpdateNewUser } from "../../types/User";
 
 interface UserReducer {
   users: User[];
@@ -14,29 +15,61 @@ const initialUsers: UserReducer = {
   loading: true,
   error: "",
 };
-export const logIn = createAsyncThunk(
-  "login",
-  async ({ email, password }: UserLogin) => {
-    try {
-      const result = await axios.post<{ login_token: string }>(
-        "https://api.escuelajs.co/api/v1/auth/login",
-        { email, password }
-      );
-      const authentication = await axios.get<User>(
-        "https://api.escuelajs.co/api/v1/auth/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${result.data.login_token}`,
-          },
+export const authenticate = createAsyncThunk(
+  "authenticate",
+  async (access_token: string) => {
+      try {
+          const authentication = await axios.get<User>("https://api.escuelajs.co/api/v1/auth/profile", {
+              headers: {
+                  "Authorization": `Bearer ${access_token}`
+              }
+          })
+          return authentication.data
+      }
+      catch (e) {
+          const error = e as AxiosError
+          return error
+      }
+  })
+  export const login = createAsyncThunk(
+    "login",
+    async ({ email, password }: UserLogin, { dispatch }) => {
+        try {
+            const result = await axios.post<{ access_token: string }>("https://api.escuelajs.co/api/v1/auth/login", { email, password })
+            localStorage.setItem("token", result.data.access_token)
+            const authentication = await dispatch(authenticate(result.data.access_token))
+            return authentication.payload as User
         }
-      );
-      return authentication.data;
-    } catch (e) {
-      const err = e as AxiosError;
-      return err.message;
+        catch (e) {
+            const error = e as AxiosError
+            return error
+        }
     }
-  }
-);
+)
+
+// export const logIn = createAsyncThunk(
+//   "login",
+//   async ({ email, password }: UserLogin) => {
+//     try {
+//       const result = await axios.post<{ login_token: string }>(
+//         "https://api.escuelajs.co/api/v1/auth/login",
+//         { email, password }
+//       );
+//       const authentication = await axios.get<User>(
+//         "https://api.escuelajs.co/api/v1/auth/profile",
+//         {
+//           headers: {
+//             Authorization: `Bearer ${result.data.login_token}`,
+//           },
+//         }
+//       );
+//       return authentication.data;
+//     } catch (e) {
+//       const err = e as AxiosError;
+//       return err.message;
+//     }
+//   }
+// );
 export const getAllUsers = createAsyncThunk(
   "getAllUsers",
   async () => {
@@ -91,14 +124,47 @@ const usersSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-    .addCase(logIn.fulfilled, (state, action) => {
+    // .addCase(login.fulfilled, (state, action) => {
+    //   if (action.payload instanceof AxiosError) {
+    //     state.error = action.payload.message;
+    //   } else {
+    //     state.currentUser =action.payload
+    //   }
+    //   state.loading = true;
+    // })
+
+    ////////////////////
+    .addCase(login.fulfilled, (state, action) => {
       if (action.payload instanceof AxiosError) {
         state.error = action.payload.message;
       } else {
-        // state.currentUser=action.payload
+        state.currentUser = action.payload;
+        console.log(state.currentUser)
+        state.loading = false;
       }
+    })
+    .addCase(login.pending, (state, action) => {
       state.loading = true;
     })
+    .addCase(login.rejected, (state, action) => {
+      state.error = "Failed login";
+    })
+    .addCase(authenticate.fulfilled, (state, action) => {
+      if (action.payload instanceof AxiosError) {
+        state.error = action.payload.message;
+      } else {
+        state.currentUser = action.payload;
+        console.log(state.currentUser)
+      }
+      state.loading = false;
+    })
+    .addCase(authenticate.pending, (state, action) => {
+      state.loading = true;
+    })
+    .addCase(authenticate.rejected, (state, action) => {
+      state.error = "Failed authentication";
+    })
+    ///////////////////
     .addCase(getAllUsers.pending, (state, action) => {
       state.loading = true;
     })
@@ -115,7 +181,7 @@ const usersSlice = createSlice({
       }
     })
     .addCase(createUser.pending, (state) => {
-      state.loading = true;
+      state.loading = false;
     })
     .addCase(createUser.rejected, (state) => {
       state.loading = false;

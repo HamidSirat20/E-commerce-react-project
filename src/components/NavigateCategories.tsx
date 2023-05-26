@@ -1,9 +1,11 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect } from "react";
+import { Box, CardMedia, Stack } from "@mui/material";
+
 import useAppSelector from "../hooks/useAppSelector";
-import { Box, Button, CardMedia, Stack } from "@mui/material";
 import useAppDispatch from "../hooks/useAppDispatch";
 import { fetchAllCategories } from "../redux/reducers/categoryReducer";
 import clothes from "../../src/tests/data/sliderData/clothes.jpg";
+
 const NavigateCategories = () => {
   const products = useAppSelector((state) => state.productsReducer.products);
   const dispatch = useAppDispatch();
@@ -12,6 +14,7 @@ const NavigateCategories = () => {
     dispatch(fetchAllCategories());
   }, []);
   const categories = useAppSelector((state) => state.categoryReducer);
+
   return (
     <Box>
       <Stack
@@ -23,33 +26,7 @@ const NavigateCategories = () => {
           paddingTop: "2rem",
           flexDirection: "row",
         }}
-      >
-        {/* {categories.map((categ) => {
-          return (
-            <Box
-              key={categ.id}
-              sx={{
-                marginRight: "0.25rem",
-              }}
-            >
-              <Button
-              // onClick={setCategory(categ)}
-                variant="outlined"
-                sx={{
-                  width: "100%",
-                  textTransform: "none",
-                  "&:hover": {
-                    backgroundColor: "Blue",
-                    color: "white",
-                  },
-                }}
-              >
-                {categ.name}
-              </Button>
-            </Box>
-          );
-        })} */}
-      </Stack>
+      ></Stack>
       <Box
         sx={{
           backgroundColor: "green",
@@ -98,6 +75,3 @@ const NavigateCategories = () => {
 };
 
 export default NavigateCategories;
-function uesState(): [any, any] {
-  throw new Error("Function not implemented.");
-}

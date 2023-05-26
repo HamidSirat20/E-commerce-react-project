@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Box, Button, CircularProgress, FormControl, TextField, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+
 import useAppSelector from "../hooks/useAppSelector";
 import { UpdateNewUser } from "../types/User";
 import { updateSingleUser } from "../redux/reducers/usersReducer";
+import useAppDispatch from "../hooks/useAppDispatch";
 
 const UpdateUser = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch()
   const { loading, error } = useAppSelector((state) => state.usersReducers);
   const [userId, setUserId] = useState<number>(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState("");
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const updateUser: UpdateNewUser = {
@@ -33,11 +33,9 @@ const UpdateUser = () => {
       setAvatar("");
     });
   };
-
   if (loading) {
     return <CircularProgress />;
   }
-
   if (error) {
     return <Typography variant="body1">{error}</Typography>;
   }

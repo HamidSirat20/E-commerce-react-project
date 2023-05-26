@@ -1,22 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+
 import Product, { Category } from "../../types/Product";
 
-// export const fetchAllProductsCateg = createAsyncThunk(
-//     "fetchAllProductsCateg",
-//     async (categ:Category) => {
-//       try {
-//         const fetchProducts = axios.get<Product[]>(
-//           `https://api.escuelajs.co/api/v1/products`
-//         );
-//         const filterCat= (await fetchProducts).data.filter(cat=>cat.category.name===categ.name)
-//         return await filterCat;
-//       } catch (e) {
-//         const error = e as AxiosError;
-//         return error.message;
-//       }
-//     }
-//   );
 export const fetchAllCategories = createAsyncThunk('fetchAllCategories',
 async () => {
     try {

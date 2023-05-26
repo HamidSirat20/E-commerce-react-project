@@ -1,65 +1,10 @@
-// import React, { useEffect, useState } from "react";
-// import TemplateCard from "./components/TemplateCard";
-import { Container, Stack } from "@mui/material";
-import TemplateCard from "./components/TemplateCard";
-import RegisterUser from "./components/RegisterUser";
-import Cart from "./components/Cart";
-import NavBar from "./components/NavBar";
-import { BrowserRouter, createBrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";
-import WelcomeSlider from "./components/WelcomeSlider";
-import NavigateCategories from "./components/NavigateCategories";
-import Main from "./components/Main";
-import LogIn from "./components/LogIn";
-import UsersList from "./components/UsersList";
-import CreateUser from "./components/CreateUser";
-import UpdateUser from "./components/UpdateUser";
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <NavBar/>,
-//     children:[
-//       {
-//         path: "/",
-//         element:  <Container><Main></Main> </Container>
-//         ,
-//       },
-//       {
-//         path:'/Profile',
-//         element: <Stack margin='auto 0' marginTop={10}>
-//           <RegisterUser></RegisterUser>
-//           <LogIn></LogIn> <UsersList></UsersList>
-//           {/* <CreateUser></CreateUser> */}
-//           <UpdateUser></UpdateUser>
-//           </Stack>
-//       },
-//       {
-//         path:"/products",
-//         element:<Container><TemplateCard></TemplateCard></Container>
-//       },
-//     ],
-//   },
-// ]);
+import React from "react";
+import { RouterProvider} from "react-router-dom";
+
+import route from './routes/Routes'
 const App = () => {
   return (
-    // <RouterProvider router={router}></RouterProvider>
-    <Routes>
-      <Route path="/" element={<NavBar/>}>
-        <Route path="/" element={<WelcomeSlider></WelcomeSlider>}></Route>
-
-      </Route>
-    </Routes>
-
-
-
-    // <div>
-    //   {/* <ProductWithLoading/>  */}
-    //   {/* {<RegisterUser /> } */}
-    //   <NavBar/>
-    //   <Container>
-    //     <TemplateCard />
-    //   </Container>
-    //   <Cart/>
-    // </div>
+    <RouterProvider router={route} />
   );
 };
 

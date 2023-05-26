@@ -15,5 +15,6 @@ const categoryC:Category ={
     name:'category C',
     image: ""
 }
+
 export const categories =[categoryA,categoryB,categoryC]
 export {categoryA,categoryB,categoryC}
