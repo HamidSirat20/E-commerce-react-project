@@ -6,11 +6,17 @@ import NotFound from '../pages/NotFound'
 import Products from '../pages/Products'
 import SignUp from '../pages/SignUp'
 import Profile from '../pages/Profile'
-import Login from '../pages/Login'
+import Signin from '../pages/LogIn'
 import UsersList from '../pages/UserList'
 import { CreateNewProduct } from '../pages/CreateNewProduct'
 import DeleteSingleProduct from '../pages/DeleteSingleProduct'
 import UpdateProduct from '../pages/UpdateProduct'
+import TestLogIn from '../components/TestLogIn'
+import CheckOutComponent from '../components/CheckOutComponent'
+import LogIn from '../components/LogIn'
+import NavBar from '../components/NavBar'
+import LogOut from '../pages/LogOut'
+import UserLogin from '../pages/LogIn'
 
 const route = createBrowserRouter([
     {
@@ -31,8 +37,8 @@ const route = createBrowserRouter([
       element: <SignUp />
     },
     {
-      path: "/signin",
-      element: <Login />
+      path: "/login",
+      element: <UserLogin/>
     },
     {
       path: "/profile",
@@ -49,6 +55,14 @@ const route = createBrowserRouter([
     {
       path: "/edit-product",
       element: <UpdateProduct />
+    },
+    {
+      path: "/logout",
+      element: <LogOut/>
+    },
+    {
+      path: "checkout",
+      element: <CheckOutComponent/>
     }
   ])
 

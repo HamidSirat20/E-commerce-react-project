@@ -29,8 +29,20 @@ const NavBar = () => {
     <>
       <AppBar>
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            PrimePicks
+          <Typography
+            color="white"
+            variant="h5"
+            component="div"
+            sx={{ flexGrow: 1 }}
+          >
+            <NavLink to="/">
+              <Button
+                color="inherit"
+                sx={{ color: "white", fontWeight: "bold" }}
+              >
+                PrimePicks
+              </Button>
+            </NavLink>
           </Typography>
           <Stack direction="row" spacing={2}>
             <NavLink to="/">

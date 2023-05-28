@@ -1,15 +1,17 @@
-import React from 'react'
+import React from "react";
 
-import NavBar from '../components/NavBar'
-import CreateUser from '../components/CreateUser'
+import NavBar from "../components/NavBar";
+import CreateUser from "../components/CreateUser";
+import Footer from "../components/Footer";
 
 const SignUp = () => {
   return (
     <>
-        <NavBar/>
-        <CreateUser/>
+      <NavBar />
+      <CreateUser />
+      <Footer></Footer>
     </>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

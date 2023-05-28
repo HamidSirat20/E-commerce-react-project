@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
   Grid,
   TextField,
@@ -13,21 +12,31 @@ import useAppSelector from "../hooks/useAppSelector";
 import { login } from "../redux/reducers/usersReducer";
 import { useNavigate } from "react-router-dom";
 
-const LogIn = () => {
-  const navigate = useNavigate()
+const Signin = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(
     (state) => state.usersReducers.currentUser
   );
   const loading = useAppSelector((state) => state.usersReducers.loading);
-  const error = useAppSelector((state) => state.usersReducers.error);
-  const addUser = () => {};
-  useEffect(() => {
-    dispatch(login({ email, password }));
-    navigate("/")
-  }, [dispatch]);
+  //////////////////////////
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!email || !password) {
+      setError("Empty area");
+    } else {
+      navigate("/");
+      dispatch(login({ email, password })).then((action: any) => {
+        if (action.error) {
+          setError(action.payload.message);
+        }
+      });
+    }
+  };
+  ///////////////////////////
   if (loading) {
     return <Box>Loading...</Box>;
   }
@@ -54,28 +63,28 @@ const LogIn = () => {
           alignItems="center"
           minHeight="100vh"
         >
-          <FormControl>
+          <Box
+            maxWidth={400}
+            padding={2}
+            borderRadius={4}
+            boxShadow={"5px 5px 10px #ccc"}
+            sx={{
+              ":hover": {
+                boxShadow: "10px 10px 20px #ccc",
+              },
+            }}
+          >
             <Box
-              maxWidth={400}
-              padding={2}
-              borderRadius={4}
-              boxShadow={"5px 5px 10px #ccc"}
               sx={{
-                ":hover": {
-                  boxShadow: "10px 10px 20px #ccc",
-                },
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <Typography variant="h4" padding={3} textAlign="center">
-                  Login
-                </Typography>
+              <Typography variant="h4" padding={3} textAlign="center">
+                Login
+              </Typography>
+              <FormControl onSubmit={(e) => handleSubmit}>
                 <TextField
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
@@ -93,20 +102,19 @@ const LogIn = () => {
                   required
                 />
                 <Button
-                  onClick={addUser}
                   sx={{ margin: "20px", borderRadius: "5px" }}
                   variant="contained"
                   color="warning"
                 >
-                  SIGNUP
+                  Sign In
                 </Button>
-              </Box>
+              </FormControl>
             </Box>
-          </FormControl>
+          </Box>
         </Box>
       </Grid>
     </Grid>
   );
 };
 
-export default LogIn;
+export default Signin;

@@ -50,7 +50,7 @@ const CreateUser = () => {
     >
       <Grid item>
         <Box
-          style={{ width: "100%", maxWidth: "1024px", margin: "0 auto" }}
+          style={{ width: "25%", maxWidth: "1024px", margin: "0 auto" }}
           display="flex"
           flexDirection="column"
           maxWidth={400}
@@ -67,7 +67,7 @@ const CreateUser = () => {
           }}
         >
           <Typography variant="h6">Create User Account</Typography>
-          <FormControl onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <TextField
               label="Name"
               value={name}
@@ -98,11 +98,11 @@ const CreateUser = () => {
               margin="normal"
               type="text"
             />
-            <Button type="submit" variant="contained" color="primary">
-              Create User
+            <Button type="submit" onSubmit={handleSubmit} variant="contained" color="primary" sx={{margin:'20'}}>
+              Signin
             </Button>
-          </FormControl>
-          {!loading && <CircularProgress />}
+          </form>
+          {loading && <CircularProgress />}
           {error && <Typography variant="body1">{error}</Typography>}
         </Box>
       </Grid>

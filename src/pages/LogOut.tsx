@@ -1,16 +1,16 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
-import UsersList from '../components/UsersList'
+import LogedOut from '../components/LogedOut'
 import Footer from '../components/Footer'
 
-const UserList = () => {
+const LogOut = () => {
   return (
     <>
     <NavBar></NavBar>
-    <UsersList></UsersList>
+    <LogedOut></LogedOut>
     <Footer></Footer>
     </>
   )
 }
 
-export default UserList
+export default LogOut

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import useAppSelector from "../hooks/useAppSelector";
 import NavBar from "../components/NavBar";
 import { Box, Typography } from "@mui/material";
+import Footer from "../components/Footer";
 
 const Profile = () => {
   const currentUser = useAppSelector(
@@ -31,6 +32,7 @@ const Profile = () => {
           {currentUser?.email}
         </Typography>
         <img width={320} height={320} src={currentUser?.avatar} alt="avatar" />
+        <Footer></Footer>
       </Box>
     </>
   );

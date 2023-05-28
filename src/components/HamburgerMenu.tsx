@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Button, IconButton, Menu, MenuItem } from "@mui/material";
+import { Box, Button, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const MyNavigation = () => {
@@ -15,7 +15,7 @@ const MyNavigation = () => {
     setAnchorEl(null);
   };
   return (
-    <div>
+    <Box>
       <IconButton
         edge="start"
         color="inherit"
@@ -34,8 +34,8 @@ const MyNavigation = () => {
         }}
       >
         <MenuItem onClick={handleMenuClose}>
-          <NavLink to="/signin" style={{ textDecoration: "none" }}>
-            <Button color="inherit">Sign In</Button>
+          <NavLink to="/login" style={{ textDecoration: "none" }}>
+            <Button color="inherit">Log In</Button>
           </NavLink>
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
@@ -47,7 +47,7 @@ const MyNavigation = () => {
           <NavLink to='/logout'><Button color="inherit">Logout</Button></NavLink>
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };
 

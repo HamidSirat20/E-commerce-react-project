@@ -6,13 +6,13 @@ import User, { CreateNewUser, UpdateNewUser } from "../../types/User";
 
 interface UserReducer {
   users: User[];
-  currentUser?: User;
+  currentUser?: User|null;
   loading: boolean;
   error: string;
 }
 const initialUsers: UserReducer = {
   users: [],
-  loading: true,
+  loading: false,
   error: "",
 };
 export const authenticate = createAsyncThunk(
@@ -46,30 +46,6 @@ export const authenticate = createAsyncThunk(
         }
     }
 )
-
-// export const logIn = createAsyncThunk(
-//   "login",
-//   async ({ email, password }: UserLogin) => {
-//     try {
-//       const result = await axios.post<{ login_token: string }>(
-//         "https://api.escuelajs.co/api/v1/auth/login",
-//         { email, password }
-//       );
-//       const authentication = await axios.get<User>(
-//         "https://api.escuelajs.co/api/v1/auth/profile",
-//         {
-//           headers: {
-//             Authorization: `Bearer ${result.data.login_token}`,
-//           },
-//         }
-//       );
-//       return authentication.data;
-//     } catch (e) {
-//       const err = e as AxiosError;
-//       return err.message;
-//     }
-//   }
-// );
 export const getAllUsers = createAsyncThunk(
   "getAllUsers",
   async () => {
@@ -118,28 +94,25 @@ const usersSlice = createSlice({
   name: "users",
   initialState: initialUsers,
   reducers: {
-    createNewUsers: (state, action: PayloadAction<User>) => {
-      state.users.push(action.payload);
-    },
+    logoutUser: (state) => {
+      if (localStorage.getItem("token")) {
+        localStorage.removeItem("token");
+        return {
+          ...state,
+          currentUser: null,
+          };
+      }
+      state.currentUser = undefined;
+    }
   },
   extraReducers: (build) => {
     build
-    // .addCase(login.fulfilled, (state, action) => {
-    //   if (action.payload instanceof AxiosError) {
-    //     state.error = action.payload.message;
-    //   } else {
-    //     state.currentUser =action.payload
-    //   }
-    //   state.loading = true;
-    // })
-
-    ////////////////////
     .addCase(login.fulfilled, (state, action) => {
       if (action.payload instanceof AxiosError) {
         state.error = action.payload.message;
+        state.loading=false
       } else {
         state.currentUser = action.payload;
-        console.log(state.currentUser)
         state.loading = false;
       }
     })
@@ -147,7 +120,8 @@ const usersSlice = createSlice({
       state.loading = true;
     })
     .addCase(login.rejected, (state, action) => {
-      state.error = "Failed login";
+      state.error = "Signin failed";
+      state.loading=false
     })
     .addCase(authenticate.fulfilled, (state, action) => {
       if (action.payload instanceof AxiosError) {
@@ -162,7 +136,7 @@ const usersSlice = createSlice({
       state.loading = true;
     })
     .addCase(authenticate.rejected, (state, action) => {
-      state.error = "Failed authentication";
+      state.error = "Authentication Failed";
     })
     ///////////////////
     .addCase(getAllUsers.pending, (state, action) => {
@@ -181,7 +155,7 @@ const usersSlice = createSlice({
       }
     })
     .addCase(createUser.pending, (state) => {
-      state.loading = false;
+      state.loading = true;
     })
     .addCase(createUser.rejected, (state) => {
       state.loading = false;
@@ -216,5 +190,4 @@ const usersSlice = createSlice({
 });
 
 const usersReducers = usersSlice.reducer;
-export const { createNewUsers } = usersSlice.actions;
 export default usersReducers;
