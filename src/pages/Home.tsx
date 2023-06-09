@@ -1,21 +1,19 @@
-import React from 'react'
+import React from "react";
 
-import NavBar from '../components/NavBar'
-import WelcomeSlider from '../components/WelcomeSlider'
-import NavigateCategories from '../components/NavigateCategories'
-import Cart from '../components/Cart'
-import Footer from '../components/Footer'
+import NavBar from "../components/NavBar";
+import WelcomeSlider from "../components/WelcomeSlider";
+import NavigateCategories from "../components/NavigateCategories";
+import Cart from "../components/Cart";
+import Footer from "../components/Footer";
+import DrawerComponent from "./AdminDashboard";
 
 const Home = () => {
   return (
     <>
-    <NavBar/>
-    <WelcomeSlider></WelcomeSlider>
-    <NavigateCategories></NavigateCategories>
-    <Cart></Cart>
-    <Footer></Footer>
+      <WelcomeSlider />
+      <NavigateCategories />
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

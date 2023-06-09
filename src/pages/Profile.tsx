@@ -12,7 +12,6 @@ const Profile = () => {
 
   return (
     <>
-      <NavBar />
       <Box
         sx={{
           padding: "1rem",
@@ -32,7 +31,6 @@ const Profile = () => {
           {currentUser?.email}
         </Typography>
         <img width={320} height={320} src={currentUser?.avatar} alt="avatar" />
-        <Footer></Footer>
       </Box>
     </>
   );

@@ -1,19 +1,28 @@
-import React, { useEffect } from "react";
-import { Box, CardMedia, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, CardMedia, Stack } from "@mui/material";
 
 import useAppSelector from "../hooks/useAppSelector";
 import useAppDispatch from "../hooks/useAppDispatch";
-import { fetchAllCategories } from "../redux/reducers/categoryReducer";
+import {
+  fetchAllCategories,
+  fetchCatProducts,
+} from "../redux/reducers/categoryReducer";
 import clothes from "../../src/tests/data/sliderData/clothes.jpg";
 
 const NavigateCategories = () => {
-  const products = useAppSelector((state) => state.productsReducer.products);
+  const [catId, setCatId] = useState<number>(1);
   const dispatch = useAppDispatch();
+  const categoryProducts = useAppSelector(
+    (state) => state.categoryReducer.category
+  );
   const image = clothes;
+  const categories = useAppSelector((state) => state.catReducer);
+  useEffect(() => {
+    dispatch(fetchCatProducts(catId));
+  }, [catId]);
   useEffect(() => {
     dispatch(fetchAllCategories());
   }, []);
-  const categories = useAppSelector((state) => state.categoryReducer);
 
   return (
     <Box>
@@ -26,7 +35,21 @@ const NavigateCategories = () => {
           paddingTop: "2rem",
           flexDirection: "row",
         }}
-      ></Stack>
+      >
+        <Box>
+          {categories.map((cat) => {
+            return (
+              <Button
+                onClick={(e) => setCatId(cat.id)}
+                variant="contained"
+                sx={{ marginLeft: "20px" }}
+              >
+                {cat.name}
+              </Button>
+            );
+          })}
+        </Box>
+      </Stack>
       <Box
         sx={{
           backgroundColor: "green",

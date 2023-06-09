@@ -1,16 +1,14 @@
-import React from 'react'
-import NavBar from '../components/NavBar'
-import DeleteProduct from '../components/DeleteProduct'
-import Footer from '../components/Footer'
+import React from "react";
+import NavBar from "../components/NavBar";
+import DeleteProduct from "../components/DeleteProduct";
+import Footer from "../components/Footer";
 
 const DeleteSingleProduct = () => {
   return (
     <>
-    <NavBar></NavBar>
-    <DeleteProduct></DeleteProduct>
-    <Footer></Footer>
+      <DeleteProduct />
     </>
-  )
-}
+  );
+};
 
-export default DeleteSingleProduct
+export default DeleteSingleProduct;

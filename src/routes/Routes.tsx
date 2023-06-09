@@ -17,53 +17,69 @@ import LogIn from '../components/LogIn'
 import NavBar from '../components/NavBar'
 import LogOut from '../pages/LogOut'
 import UserLogin from '../pages/LogIn'
+import HeaderFooter from '../pages/HeaderFooter'
+import SingleProductPage from '../pages/SingleProductPage'
 
 const route = createBrowserRouter([
-    {
-      path: "/",
-      element: <Home />,
-      errorElement: <NotFound />,
-    },
-    {
-      path: "/products",
-      element: <Products />
-    },
-    {
-      path: "/users",
-      element: <UsersList />
-    },
-    {
-      path: "/signup",
-      element: <SignUp />
-    },
-    {
-      path: "/login",
-      element: <UserLogin/>
-    },
-    {
-      path: "/profile",
-      element: <Profile />
-    },
-    {
-      path: "/new-product",
-      element: <CreateNewProduct />
-    },
-    {
-      path: "/delete-product",
-      element: <DeleteSingleProduct />
-    },
-    {
-      path: "/edit-product",
-      element: <UpdateProduct />
-    },
-    {
-      path: "/logout",
-      element: <LogOut/>
-    },
-    {
-      path: "checkout",
-      element: <CheckOutComponent/>
-    }
+  {
+    path:'/',
+    element:<HeaderFooter/> ,
+    errorElement: <NotFound />,
+    children:[
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/products",
+        element: <Products />
+      },
+      {
+        path: "/users",
+        element: <UsersList />
+      },
+      {
+        path: "/signup",
+        element: <SignUp />
+      },
+      {
+        path: "/login",
+        element: <UserLogin/>
+      },
+      {
+        path: "/profile",
+        element: <Profile />
+      },
+      {
+        path: "/new-product",
+        element: <CreateNewProduct />
+      },
+      {
+        path: "/delete-product",
+        element: <DeleteSingleProduct />
+      },
+      {
+        path: "/edit-product",
+        element: <UpdateProduct />
+      },
+      {
+        path: "/logout",
+        element: <LogOut/>
+      },
+      {
+        path: "checkout",
+        element: <CheckOutComponent/>
+      },
+      {
+        path: ":userId",
+        element: <SingleProductPage />
+      },{
+        path: "profile",
+        element: <Profile />
+      },
+    ]
+  },
+
   ])
 
 export default route

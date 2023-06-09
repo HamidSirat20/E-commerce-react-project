@@ -5,15 +5,17 @@ import NavBar from "./NavBar";
 const OrderSuccessMessage = () => {
   return (
     <>
-    <NavBar></NavBar>
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-    >
-      <Typography variant="h3" sx={{color:'green'}}>Order successfully checked out!</Typography>
-    </Box></>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h3" sx={{ color: "green" }}>
+          Order successfully checked out!
+        </Typography>
+      </Box>
+    </>
   );
 };
 

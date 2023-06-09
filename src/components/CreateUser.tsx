@@ -1,44 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
   CircularProgress,
-  FormControl,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
-import { createUser } from "../redux/reducers/usersReducer";
+import { createUser, reset } from "../redux/reducers/usersReducer";
 import { CreateNewUser } from "../types/User";
 import useAppSelector from "../hooks/useAppSelector";
 import useAppDispatch from "../hooks/useAppDispatch";
 import { useNavigate } from "react-router-dom";
 
 const CreateUser = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.usersReducers);
+  const { loading, error, users, currentUser, isSuccess } = useAppSelector(
+    (state) => state.usersReducers
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState("");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newUser: CreateNewUser = {
-      email,
-      password,
-      name,
-      avatar,
-    };
-    dispatch(createUser(newUser) as any).then(() => {
-      setEmail("");
-      setPassword("");
-      setName("");
-      setAvatar("");
-    });
-    navigate('/')
+    if (password !== password2) {
+      toast.error("password does not match");
+    } else {
+      const newUser: CreateNewUser = {
+        email,
+        password,
+        name,
+        avatar,
+      };
+      dispatch(createUser(newUser) as any);
+    }
   };
+  useEffect(() => {
+    if (error) {
+      toast.error("Sign in unsuccessful");
+    }
+    if (isSuccess) {
+      navigate("/");
+      toast.success("Successfully Created an account");
+    }
+    dispatch(reset());
+  }, [isSuccess]);
   return (
     <Grid
       container
@@ -91,6 +102,14 @@ const CreateUser = () => {
               margin="normal"
             />
             <TextField
+              label="Confirm Password"
+              type="password"
+              value={password2}
+              onChange={(e) => setPassword2(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
               label="Avatar URL"
               value={avatar}
               onChange={(e) => setAvatar(e.target.value)}
@@ -98,7 +117,13 @@ const CreateUser = () => {
               margin="normal"
               type="text"
             />
-            <Button type="submit" onSubmit={handleSubmit} variant="contained" color="primary" sx={{margin:'20'}}>
+            <Button
+              type="submit"
+              onSubmit={handleSubmit}
+              variant="contained"
+              color="primary"
+              sx={{ margin: "20" }}
+            >
               Signin
             </Button>
           </form>

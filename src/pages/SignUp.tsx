@@ -7,9 +7,7 @@ import Footer from "../components/Footer";
 const SignUp = () => {
   return (
     <>
-      <NavBar />
       <CreateUser />
-      <Footer></Footer>
     </>
   );
 };

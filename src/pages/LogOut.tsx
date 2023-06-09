@@ -1,16 +1,14 @@
-import React from 'react'
-import NavBar from '../components/NavBar'
-import LogedOut from '../components/LogedOut'
-import Footer from '../components/Footer'
+import React from "react";
+import NavBar from "../components/NavBar";
+import LogedOut from "../components/LogedOut";
+import Footer from "../components/Footer";
 
 const LogOut = () => {
   return (
     <>
-    <NavBar></NavBar>
-    <LogedOut></LogedOut>
-    <Footer></Footer>
+      <LogedOut />
     </>
-  )
-}
+  );
+};
 
-export default LogOut
+export default LogOut;

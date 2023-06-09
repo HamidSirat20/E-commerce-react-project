@@ -4,7 +4,7 @@ interface User {
   password: string;
   name: string;
   role: "customer" | "admin";
-  avatar?: string;
+  avatar: string;
 }
 
 export interface CreateNewUser {

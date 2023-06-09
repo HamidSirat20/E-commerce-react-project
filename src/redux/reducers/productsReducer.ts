@@ -8,11 +8,13 @@ import { UpdateSingleProduct } from "../../types/UpdateSingleProduct";
 interface RetrieveProducts {
   loading: boolean;
   error: string;
+  category:number
   products: Product[];
 }
 const initialState: RetrieveProducts = {
   loading: true,
   error: "",
+  category:0,
   products: [],
 };
 interface Pagination {
@@ -25,6 +27,34 @@ export const fetchAllProducts = createAsyncThunk(
     try {
       const fetchProducts = axios.get<Product[]>(
         `https://api.escuelajs.co/api/v1/products?offset=${offset}&limit=${limit}`
+      );
+      return (await fetchProducts).data;
+    } catch (e) {
+      const error = e as AxiosError;
+      return error.message;
+    }
+  }
+);
+export const fetchSingleProduct = createAsyncThunk(
+  "fetchSingleProduct",
+  async (id:number) => {
+    try {
+      const fetchProducts = axios.get<Product>(
+        `https://api.escuelajs.co/api/v1/products/${id}`
+      );
+      return (await fetchProducts).data;
+    } catch (e) {
+      const error = e as AxiosError;
+      return error.message;
+    }
+  }
+);
+export const searchByCategories = createAsyncThunk(
+  "searchByCategories",
+  async (id:number) => {
+    try {
+      const fetchProducts = axios.get<Product[]>(
+        `https://api.escuelajs.co/api/v1/categories/${id}`
       );
       return (await fetchProducts).data;
     } catch (e) {
@@ -85,6 +115,15 @@ const productsSlice = createSlice({
     emptyProductList: (state) => {
       return initialState;
     },
+    // reset: (state) => {
+    //   state.category =0
+    //   state.error=''
+    //   state.loading=false
+    //   state.products=[]
+    // },
+    setCategory: (state,action) => {
+      state.category = action.payload
+    },
     sortPrice: (state, action: PayloadAction<"asc" | "desc">) => {
       if (action.payload === "asc") {
         state.products.sort((a, b) => a.price - b.price);
@@ -114,6 +153,36 @@ const productsSlice = createSlice({
         state.error = "Cannot fetch this time, try later";
       })
       .addCase(fetchAllProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+        } else {
+          state.products = action.payload;
+        }
+      })
+      .addCase(fetchSingleProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSingleProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Cannot fetch this time, try later";
+      })
+      .addCase(fetchSingleProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+        } else {
+          state.products = [action.payload];
+        }
+      })
+      .addCase(searchByCategories.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(searchByCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Cannot fetch this time, try later";
+      })
+      .addCase(searchByCategories.fulfilled, (state, action) => {
         state.loading = false;
         if (typeof action.payload === "string") {
           state.error = action.payload;
@@ -164,10 +233,11 @@ const productsSlice = createSlice({
         state.products=newProducts
         state.loading=false
       })
+
   },
 });
 
 const productsReducer = productsSlice.reducer;
-export const { sortPrice, sortByCategory, emptyProductList } =
+export const { sortPrice, sortByCategory, emptyProductList,setCategory } =
   productsSlice.actions
 export default productsReducer;
