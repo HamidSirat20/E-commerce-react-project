@@ -1,28 +1,37 @@
-import React, { useEffect } from 'react'
-
-import useAppSelector from '../hooks/useAppSelector'
-import NavBar from '../components/NavBar'
-import { Box, Typography } from '@mui/material'
+import useAppSelector from "../hooks/useAppSelector";
+import { Container, Typography, Box, Avatar } from "@mui/material";
 
 const Profile = () => {
-  const currentUser = useAppSelector((state) => state.usersReducers.currentUser)
+  const currentUser = useAppSelector(
+    (state) => state.usersReducers.currentUser
+  );
 
   return (
-    <>
-      <Box sx={{
-        padding: '1rem',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <Typography variant="h3" gutterBottom>Your Profile</Typography>
-        <Typography variant="body1" gutterBottom>Welcome:{currentUser?.name}</Typography>
-        <Typography variant="body1" gutterBottom>{currentUser?.email}</Typography>
-        <img width={320} height={320} src={currentUser?.avatar} alt="avatar" />
-      </Box>
-    </>
-  )
-}
+    <Container
+      style={{
+        marginTop: "9rem",
+        paddingBottom: "5rem",
+        textAlign: "center",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Avatar
+        alt="User Avatar"
+        src={currentUser?.avatar}
+        sx={{ width: 150, height: 150, mb: 2 }}
+      />
+      <Typography variant="h3" gutterBottom>
+        {currentUser?.name}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        {currentUser?.email}
+      </Typography>
+    </Container>
+  );
+};
 
-export default Profile
+export default Profile;

@@ -4,8 +4,8 @@ import productsReducer from "./reducers/productsReducer";
 import usersReducers from "./reducers/usersReducer";
 import cartReducer from "./reducers/cartReducer";
 import sliderReducer from "./reducers/sliderReducer";
-import categoryReducer, { catReducer } from "./reducers/categoryReducer";
 import drawerReducer from "./reducers/drawerReducer";
+import categoryReducer from "./reducers/categoryReducer";
 
 const store = configureStore({
   reducer: {
@@ -15,7 +15,6 @@ const store = configureStore({
     sliderReducer,
     categoryReducer,
     drawerReducer,
-    catReducer,
   },
 });
 

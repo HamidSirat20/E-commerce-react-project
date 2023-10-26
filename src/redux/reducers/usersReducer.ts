@@ -1,9 +1,4 @@
-import {
-  PayloadAction,
-  createAction,
-  createAsyncThunk,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
 import { UserLogin } from "../../types/UserLogin";
@@ -11,18 +6,21 @@ import User, { CreateNewUser, UpdateNewUser } from "../../types/User";
 
 interface UserReducer {
   users: User[];
-  currentUser?: User;
+  currentUser: User | null;
+  isLoggedIn: boolean;
   loading: boolean;
   error: string | null;
   isSuccess: boolean;
-  checkemail: boolean,
+  checkemail: boolean;
 }
 const initialUsers: UserReducer = {
   users: [],
   loading: false,
+  isLoggedIn: false,
   error: "",
   isSuccess: false,
-  checkemail:false
+  checkemail: false,
+  currentUser: null,
 };
 export const authenticate = createAsyncThunk(
   "authenticate",
@@ -110,8 +108,10 @@ const usersSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.users = [];
+      state.currentUser = null;
       state.loading = false;
       state.error = null;
+      state.isLoggedIn = false;
       localStorage.removeItem("token");
     },
     reset: (state) => {
@@ -119,12 +119,19 @@ const usersSlice = createSlice({
       state.loading = false;
       state.error = "";
       state.isSuccess = false;
+      state.isLoggedIn = false;
     },
   },
   extraReducers: (build) => {
     build
+      .addCase(login.pending, (state, action) => {
+        state.loading = true;
+        state.isSuccess = false;
+        state.isLoggedIn = false;
+      })
       .addCase(login.fulfilled, (state, action) => {
-        state.isSuccess=true
+        state.isSuccess = true;
+        state.isLoggedIn = true;
         if (action.payload instanceof AxiosError) {
           state.error = action.payload.message;
           state.loading = false;
@@ -133,12 +140,12 @@ const usersSlice = createSlice({
           state.loading = false;
         }
       })
-      .addCase(login.pending, (state, action) => {
-        state.loading = true;
-      })
+
       .addCase(login.rejected, (state, action) => {
         state.error = "Signin failed";
         state.loading = false;
+        state.isSuccess = false;
+        state.isLoggedIn = false;
       })
       .addCase(authenticate.fulfilled, (state, action) => {
         if (action.payload instanceof AxiosError) {
@@ -206,6 +213,6 @@ const usersSlice = createSlice({
   },
 });
 
-export const { reset,logout } = usersSlice.actions;
+export const { reset, logout } = usersSlice.actions;
 const usersReducers = usersSlice.reducer;
 export default usersReducers;

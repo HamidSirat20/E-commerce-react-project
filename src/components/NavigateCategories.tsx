@@ -8,15 +8,18 @@ import {
   fetchCatProducts,
 } from "../redux/reducers/categoryReducer";
 import clothes from "../../src/tests/data/sliderData/clothes.jpg";
+import { Category } from "../types/Product";
 
 const NavigateCategories = () => {
   const [catId, setCatId] = useState<number>(1);
   const dispatch = useAppDispatch();
   const categoryProducts = useAppSelector(
-    (state) => state.categoryReducer.category
+    (state) => state.categoryReducer.categories
   );
   const image = clothes;
-  const categories = useAppSelector((state) => state.catReducer);
+  const categories = useAppSelector(
+    (state) => state.categoryReducer.categories
+  );
   useEffect(() => {
     dispatch(fetchCatProducts(catId));
   }, [catId]);
@@ -37,17 +40,19 @@ const NavigateCategories = () => {
         }}
       >
         <Box>
-          {categories.map((cat) => {
-            return (
-              <Button
-                onClick={(e) => setCatId(cat.id)}
-                variant="contained"
-                sx={{ marginLeft: "20px" }}
-              >
-                {cat.name}
-              </Button>
-            );
-          })}
+          {categories
+            ? categories.map((cat) => {
+                return (
+                  <Button
+                    onClick={(e) => setCatId(cat.id)}
+                    variant="contained"
+                    sx={{ marginLeft: "20px" }}
+                  >
+                    {cat.name}
+                  </Button>
+                );
+              })
+            : ""}
         </Box>
       </Stack>
       <Box

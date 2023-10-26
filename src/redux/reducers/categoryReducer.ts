@@ -1,98 +1,84 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
 import Product, { Category } from "../../types/Product";
 
-export const fetchAllCategories = createAsyncThunk('fetchAllCategories',
-async () => {
+export const fetchAllCategories = createAsyncThunk(
+  "fetchAllCategories",
+  async () => {
     try {
-        const result = await axios.get('https://api.escuelajs.co/api/v1/categories');
-        return result.data
+      const result = await axios.get(
+        "https://api.escuelajs.co/api/v1/categories"
+      );
+      return result.data;
     } catch (e) {
-        const error = e as AxiosError
+      const error = e as AxiosError;
     }
-})
+  }
+);
 export const fetchCatProducts = createAsyncThunk(
-    "fetchCatProducts",
-    async (catId: number) => {
-      try {
-        const fetchProducts = axios.get<Product[]>(
-            `https://api.escuelajs.co/api/v1/categories/${catId}/products`
-
-        );
-        return (await fetchProducts).data;
-      } catch (e) {
-        const error = e as AxiosError;
-        return error.message;
-      }
+  "fetchCatProducts",
+  async (catId: number) => {
+    try {
+      const fetchProducts = axios.get(
+        `https://api.escuelajs.co/api/v1/categories/${catId}/products`
+      );
+      return (await fetchProducts).data;
+    } catch (e) {
+      const error = e as AxiosError;
     }
-  );
+  }
+);
 
-  const initialState: {
-    category: Product[];
-  } = {
-    category: [],
-  };
+const initialState: {
+  categoryProducts: Product[] | null;
+  categories: Category[] | null;
+  error: string;
+  loading: boolean;
+  success: boolean;
+} = {
+  categoryProducts: [],
+  categories: [],
+  error: "",
+  loading: false,
+  success: false,
+};
 
 export const categorySlice = createSlice({
-    name: 'categorySlice',
-    initialState,
-    reducers: {
+  name: "categorySlice",
+  initialState,
+  reducers: {},
+  extraReducers: (build) => {
+    build
+      .addCase(fetchAllCategories.pending, (state) => {
+        state.error = "";
+        state.loading = true;
+        state.categories = null;
+      })
+      .addCase(fetchAllCategories.fulfilled, (state, action) => {
+        if (action.payload instanceof AxiosError) {
+          return state;
+        } else {
+          state.categories = action.payload;
+        }
+      })
+      .addCase(fetchAllCategories.rejected, (state, action) => {
+        if (action.payload instanceof AxiosError) {
+          state.error = action.payload.message;
+        } else {
+          state.categories = null;
+        }
+      })
+      .addCase(fetchCatProducts.fulfilled, (state, action) => {
+        if (action.payload instanceof AxiosError) {
+          return state;
+        } else {
+          state.categoryProducts = action.payload;
+          state.success = true;
+        }
+      });
+  },
+});
 
-    },
-    extraReducers: (build) => {
-        build
-            .addCase(fetchAllCategories.fulfilled, (state, action) => {
-                if (action.payload instanceof AxiosError) {
-                    return state
-                } else {
-                    return action.payload
-                }
-            })
-            .addCase(fetchCatProducts.fulfilled, (state, action) => {
-                try {
-                  const categoryId: number = action.meta.arg;
-                  if (Array.isArray(action.payload)) {
-                    const filteredCategory: Product[] = action.payload.filter(
-                      (product: Product) => product.category.id === categoryId
-                    );
-                    state.category = filteredCategory;
-                  } else {
-                    // Handle the case when action.payload is a string (error message)
-                    // You can choose to set an error state or handle it in any other way
-                  }
-                } catch (e) {
-                  const error = e as AxiosError;
-
-                }
-              })
-
-
-
-
-
-    },
-})
-const initialState2:Category [] =[]
-export const catSlice = createSlice({
-    name: 'catSlice',
-    initialState:initialState2,
-    reducers: {
-
-    },
-    extraReducers: (build) => {
-        build
-            .addCase(fetchAllCategories.fulfilled, (state, action) => {
-                if (action.payload instanceof AxiosError) {
-                    return state
-                } else {
-                    return action.payload
-                }
-            })
-
-    },
-})
-
-export const catReducer = catSlice.reducer
-const categoryReducer = categorySlice.reducer
-export default categoryReducer
+const categoryReducer = categorySlice.reducer;
+export default categoryReducer;

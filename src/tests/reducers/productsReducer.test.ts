@@ -7,7 +7,17 @@ import productsReducer, {
 } from "../../redux/reducers/productsReducer";
 import store from "../../redux/store";
 import { UpdateSingleProduct } from "../../types/UpdateSingleProduct";
-import { newProduct, newProduct1, newProduct2, newProduct3, newProduct4, product1, product2, product3, product4 } from "../data/products";
+import {
+  newProduct,
+  newProduct1,
+  newProduct2,
+  newProduct3,
+  newProduct4,
+  product1,
+  product2,
+  product3,
+  product4,
+} from "../data/products";
 import productServer from "../servers/productServer";
 
 beforeAll(() => {
@@ -33,15 +43,15 @@ describe("Testing the productsReducer", () => {
     });
   });
   test("Testing fetchAllProducts for correct fetching", async () => {
-    await store.dispatch(fetchAllProducts({offset:0,limit:10}));
+    await store.dispatch(fetchAllProducts({ offset: 0, limit: 10 }));
     expect(store.getState().productsReducer.products.length).toEqual(4);
-    expect(store.getState().productsReducer.error==="")
-    expect(store.getState().productsReducer.loading===false)
+    expect(store.getState().productsReducer.error === "");
+    expect(store.getState().productsReducer.loading === false);
   });
-  test("Check if the new product is created",async()=>{
-    await store.dispatch(createNewProducts(newProduct))
-    expect(store.getState().productsReducer.products.length).toBe(5)
-  })
+  test("Check if the new product is created", async () => {
+    await store.dispatch(createNewProducts(newProduct));
+    expect(store.getState().productsReducer.products.length).toBe(5);
+  });
   // test("Testing if the product is updated", async()=>{
   //   console.log("res is", store.getState().productsReducer);
   //   const updatedProduct:UpdateSingleProduct ={
@@ -54,17 +64,27 @@ describe("Testing the productsReducer", () => {
   //   await store.dispatch(updateSingleProduct(updatedProduct))
   //   expect(store.getState().productsReducer.products.find(c=>c.id===updatedProduct.id)?.price).toBe(700)
   // })
-  test("Should update available product",async () => {
+  test("Should update available product", async () => {
     // await store.dispatch(fetchAllProducts())
     // console.log("product list is",store.getState().productsReducer.products)
-    await store.dispatch(updateSingleProduct({
-        id:1,
-        update:{
-            price: 600,
-            title:'Testing the modify function'
-        }
-    }))
-    await expect(store.getState().productsReducer.products.find(product =>product.id===1)?.price).toBe(600)
-    await expect(store.getState().productsReducer.products.find(product => product.id === 1)?.title).toBe('Testing the modify function')
-})
+    await store.dispatch(
+      updateSingleProduct({
+        id: 1,
+        // update:{
+        //     price: 600,
+        //     title:'Testing the modify function'
+        // }
+      })
+    );
+    await expect(
+      store
+        .getState()
+        .productsReducer.products.find((product) => product.id === 1)?.price
+    ).toBe(600);
+    await expect(
+      store
+        .getState()
+        .productsReducer.products.find((product) => product.id === 1)?.title
+    ).toBe("Testing the modify function");
+  });
 });

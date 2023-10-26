@@ -4,23 +4,29 @@ import {
   Button,
   FormControl,
   Grid,
+  InputAdornment,
+  IconButton,
+  Paper,
   TextField,
   Typography,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import useAppDispatch from "../hooks/useAppDispatch";
 import useAppSelector from "../hooks/useAppSelector";
 import { login, reset } from "../redux/reducers/usersReducer";
 import { useNavigate } from "react-router-dom";
 
-const Signin = () => {
+const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
   const { loading, error, currentUser, isSuccess } = useAppSelector(
     (state) => state.usersReducers
   );
+
   useEffect(() => {
     if (error) {
       toast.error("An error occurred");
@@ -31,6 +37,10 @@ const Signin = () => {
     dispatch(reset());
   }, [dispatch, error, isSuccess, navigate]);
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email || !password) {
@@ -40,91 +50,65 @@ const Signin = () => {
     }
   };
 
-  if (loading) {
-    return <Box>Loading...</Box>;
-  }
-
-  if (error) {
-    return <Box>Error: {error}</Box>;
-  }
-
-  if (currentUser) {
-    return <Box>Welcome, {currentUser.name}</Box>;
-  }
-
-
   return (
     <Grid
       container
-      spacing={0}
-      direction="column"
-      alignItems="center"
       justifyContent="center"
+      alignItems="center"
       style={{ minHeight: "100vh" }}
     >
-      <Grid item>
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          minHeight="100vh"
-        >
-          <Box
-            maxWidth={400}
-            padding={2}
-            borderRadius={4}
-            boxShadow={"5px 5px 10px #ccc"}
-            sx={{
-              ":hover": {
-                boxShadow: "10px 10px 20px #ccc",
-              },
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-              }}
+      <Grid item xs={12} sm={8} md={6} lg={4}>
+        <Paper elevation={3} sx={{ padding: 4, textAlign: "center" }}>
+          <Typography variant="h4" marginBottom={3}>
+            Login
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <FormControl fullWidth margin="normal">
+              <TextField
+                label="Email"
+                variant="outlined"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+              <TextField
+                label="Password"
+                variant="outlined"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleTogglePasswordVisibility}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </FormControl>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              fullWidth
+              style={{ marginTop: 20 }}
             >
-              <Typography variant="h4" padding={3} textAlign="center">
-                Login
-              </Typography>
-              <form onSubmit={handleSubmit}>
-                <FormControl>
-                  <TextField
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    margin="dense"
-                    variant="outlined"
-                    label="Email"
-                    required
-                  />
-                  <TextField
-                    onChange={(e) => setPassword(e.target.value)}
-                    type="password"
-                    margin="dense"
-                    variant="outlined"
-                    label="Password"
-                    required
-                  />
-                  <Button
-                    sx={{ margin: "20px", borderRadius: "5px" }}
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                  >
-                    Sign In
-                  </Button>
-                </FormControl>
-              </form>
-            </Box>
-          </Box>
-        </Box>
+              Sign In
+            </Button>
+          </form>
+        </Paper>
       </Grid>
     </Grid>
   );
 };
 
-export default Signin;
+export default Login;

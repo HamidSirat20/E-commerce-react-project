@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, CircularProgress, FormControl, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import useAppSelector from "../hooks/useAppSelector";
 import { UpdateNewUser } from "../types/User";
@@ -7,7 +14,7 @@ import { updateSingleUser } from "../redux/reducers/usersReducer";
 import useAppDispatch from "../hooks/useAppDispatch";
 
 const UpdateUser = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.usersReducers);
   const [userId, setUserId] = useState<number>(0);
   const [email, setEmail] = useState("");
@@ -44,6 +51,7 @@ const UpdateUser = () => {
       style={{ width: "20%", margin: "0 auto" }}
       display="flex"
       flexDirection="column"
+      height="100vh"
       maxWidth={400}
       alignItems="center"
       justifyContent="center"

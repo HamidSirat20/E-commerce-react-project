@@ -1,58 +1,142 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import useAppDispatch from '../hooks/useAppDispatch';
-import { updateSingleProduct } from '../redux/reducers/productsReducer';
-import SendIcon from '@mui/icons-material/Send';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
+import useAppDispatch from "../hooks/useAppDispatch";
+import {
+  fetchSingleProduct,
+  updateSingleProduct,
+} from "../redux/reducers/productsReducer";
+import SendIcon from "@mui/icons-material/Send";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { Box } from "@mui/material";
+import useAppSelector from "../hooks/useAppSelector";
+import Product from "../types/Product";
+import { UpdateSingleProduct } from "../types/UpdateSingleProduct";
 
-const UpdateProduct = () => {
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const [productID, setProductId] = useState(0)
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [price, setPrice] = useState(0)
-  const [categoryId, setCategoryId] = useState(0)
-  const [images, setImages] = useState<string[]>([])
+const EditProduct = () => {
+  const { prodId } = useParams();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const singleProduct = useAppSelector(
+    (state) => state.productsReducer.product
+  );
+
+  const [product, setProduct] = useState<UpdateSingleProduct>({
+    id: 0,
+    title: "",
+    description: "",
+    price: 0,
+    categoryId: 0,
+    images: [],
+  });
+
+  useEffect(() => {
+    dispatch(fetchSingleProduct(Number(prodId)));
+  }, [prodId]);
+
+  useEffect(() => {
+    if (singleProduct) {
+      setProduct({
+        id: singleProduct.id,
+        title: singleProduct.title,
+        description: singleProduct.description,
+        price: singleProduct.price,
+        categoryId: singleProduct.category.id,
+        images: singleProduct.images,
+      });
+    }
+  }, [singleProduct]);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch(updateSingleProduct({ id: productID, update: { title, description, price, images } }))
-  }
-  return (
-    <>
-      <Typography variant="h3" gutterBottom>Update Product</Typography>
-      <form onSubmit={e => handleSubmit(e)}>
-        <Box sx={{
-              border: '1px solid lightblue',
-              borderRadius: '8px',
-              padding: '1rem',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-          <Typography variant="body1" gutterBottom>Productid:</Typography>
-          <TextField id="outlined-basic" label="Product ID" variant="outlined" type="number" value={productID} onChange={(e) => setProductId(Number(e.target.value))} /><br />
-          <Typography variant="body1" gutterBottom>Title:</Typography>
-          <TextField id="outlined-basic" label="New Title" variant="outlined" type="text" value={title} onChange={(e) => setTitle(e.target.value)} /><br />
-          <Typography variant="body1" gutterBottom>Description:</Typography>
-          <TextField id="outlined-basic" label="New Description" variant="outlined" type="text" value={description} onChange={(e) => setDescription(e.target.value)} /><br />
-          <Typography variant="body1" gutterBottom>Price:</Typography>
-          <TextField id="outlined-basic" label="New Pric" variant="outlined" type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} /><br />
-          <Typography variant="body1" gutterBottom>Category ID:</Typography>
-          <TextField id="outlined-basic" label="New Category ID" variant="outlined" type="number" value={categoryId} onChange={(e) => setCategoryId(Number(e.target.value))} /><br />
-          <Typography variant="body1" gutterBottom>Images:</Typography>
-          <TextField id="outlined-basic" label="New Images" variant="outlined" type="text" value={images} onChange={(e) => setImages(e.target.value.split(","))} /><br />
-          <Button variant="contained" type="submit" endIcon={<SendIcon />}>Submit</Button>
-          <Button variant="contained" onClick={() => navigate("/products")}>Back</Button>
-        </Box>
-      </form>
-    </>
-  )
-}
+    e.preventDefault();
+    dispatch(updateSingleProduct({ ...product }));
+    navigate(`/update-product`);
+  };
 
-export default UpdateProduct
+  return (
+    <Box
+      sx={{
+        border: "1px solid lightblue",
+        borderRadius: "8px",
+        padding: "2rem",
+        maxWidth: "400px",
+        margin: "auto",
+        textAlign: "center",
+        marginTop: "4.3rem",
+      }}
+    >
+      <Typography variant="h4" gutterBottom>
+        Edit Product
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          label="Title"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={product.title}
+          onChange={(e) => setProduct({ ...product, title: e.target.value })}
+        />
+        <TextField
+          label="Description"
+          variant="outlined"
+          fullWidth
+          multiline
+          rows={4}
+          margin="normal"
+          value={product.description}
+          onChange={(e) =>
+            setProduct({ ...product, description: e.target.value })
+          }
+        />
+        <TextField
+          label="Price"
+          variant="outlined"
+          fullWidth
+          type="number"
+          margin="normal"
+          value={product.price}
+          onChange={(e) =>
+            setProduct({ ...product, price: Number(e.target.value) })
+          }
+        />
+        <TextField
+          label="Category ID"
+          variant="outlined"
+          fullWidth
+          type="number"
+          margin="normal"
+          value={product.categoryId}
+          onChange={(e) =>
+            setProduct({ ...product, categoryId: Number(e.target.value) })
+          }
+        />
+        <TextField
+          label="Image URLs (comma separated)"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={product.images}
+          onChange={(e) =>
+            setProduct({ ...product, images: e.target.value.split(",") })
+          }
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          startIcon={<SendIcon />}
+          style={{ margin: "1rem 0" }}
+          type="submit"
+        >
+          Submit
+        </Button>
+      </form>
+    </Box>
+  );
+};
+
+export default EditProduct;

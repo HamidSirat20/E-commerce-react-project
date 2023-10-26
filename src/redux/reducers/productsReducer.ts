@@ -8,22 +8,24 @@ import { UpdateSingleProduct } from "../../types/UpdateSingleProduct";
 interface RetrieveProducts {
   loading: boolean;
   error: string;
-  category:number
+  category: number;
   products: Product[];
+  product: Product | null;
 }
 const initialState: RetrieveProducts = {
   loading: true,
   error: "",
-  category:0,
+  category: 0,
   products: [],
+  product: null,
 };
 interface Pagination {
-  offset: number
-  limit: number
+  offset: number;
+  limit: number;
 }
 export const fetchAllProducts = createAsyncThunk(
   "fetchAllProducts",
-  async ({offset,limit}:Pagination) => {
+  async ({ offset, limit }: Pagination) => {
     try {
       const fetchProducts = axios.get<Product[]>(
         `https://api.escuelajs.co/api/v1/products?offset=${offset}&limit=${limit}`
@@ -37,7 +39,7 @@ export const fetchAllProducts = createAsyncThunk(
 );
 export const fetchSingleProduct = createAsyncThunk(
   "fetchSingleProduct",
-  async (id:number) => {
+  async (id: number) => {
     try {
       const fetchProducts = axios.get<Product>(
         `https://api.escuelajs.co/api/v1/products/${id}`
@@ -51,7 +53,7 @@ export const fetchSingleProduct = createAsyncThunk(
 );
 export const searchByCategories = createAsyncThunk(
   "searchByCategories",
-  async (id:number) => {
+  async (id: number) => {
     try {
       const fetchProducts = axios.get<Product[]>(
         `https://api.escuelajs.co/api/v1/categories/${id}`
@@ -81,11 +83,11 @@ export const createNewProducts = createAsyncThunk(
 export const updateSingleProduct = createAsyncThunk(
   "updateSingleProduct",
   async (updateProduct: UpdateSingleProduct) => {
-    const { id, update } = updateProduct;
+    const product = updateProduct;
     try {
       const result = await axios.put(
-        `https://api.escuelajs.co/api/v1/products/${id}`,
-        update
+        `https://api.escuelajs.co/api/v1/products/${product.id}`,
+        product
       );
       return result.data;
     } catch (e) {
@@ -121,25 +123,14 @@ const productsSlice = createSlice({
     //   state.loading=false
     //   state.products=[]
     // },
-    setCategory: (state,action) => {
-      state.category = action.payload
+    setCategory: (state, action) => {
+      state.category = action.payload;
     },
     sortPrice: (state, action: PayloadAction<"asc" | "desc">) => {
       if (action.payload === "asc") {
         state.products.sort((a, b) => a.price - b.price);
       } else {
         state.products.sort((a, b) => b.price - a.price);
-      }
-    },
-    sortByCategory: (state, action: PayloadAction<"asc" | "desc">) => {
-      if (action.payload === "asc") {
-        state.products.sort((a, b) =>
-          a.category.name.localeCompare(b.category.name)
-        );
-      } else {
-        state.products.sort((a, b) =>
-          b.category.name.localeCompare(a.category.name)
-        );
       }
     },
   },
@@ -172,7 +163,7 @@ const productsSlice = createSlice({
         if (typeof action.payload === "string") {
           state.error = action.payload;
         } else {
-          state.products = [action.payload];
+          state.product = action.payload;
         }
       })
       .addCase(searchByCategories.pending, (state) => {
@@ -216,10 +207,10 @@ const productsSlice = createSlice({
       .addCase(updateSingleProduct.fulfilled, (state, action) => {
         state.products.map((product) => {
           if (product.id === action.payload.id) {
-              return action.payload
+            return action.payload;
           }
-          return product
-      })
+          return product;
+        });
       })
       .addCase(deleteSignleProduct.pending, (state, action) => {
         state.loading = true;
@@ -229,15 +220,16 @@ const productsSlice = createSlice({
         state.error = "Cannot delete the product now, try later";
       })
       .addCase(deleteSignleProduct.fulfilled, (state, action) => {
-        const newProducts = state.products.filter(product=> product.id !== action.payload.id)
-        state.products=newProducts
-        state.loading=false
-      })
-
+        const newProducts = state.products.filter(
+          (product) => product.id !== action.payload.id
+        );
+        state.products = newProducts;
+        state.loading = false;
+      });
   },
 });
 
 const productsReducer = productsSlice.reducer;
-export const { sortPrice, sortByCategory, emptyProductList,setCategory } =
-  productsSlice.actions
+export const { sortPrice, emptyProductList, setCategory } =
+  productsSlice.actions;
 export default productsReducer;

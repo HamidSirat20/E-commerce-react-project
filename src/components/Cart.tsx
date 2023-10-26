@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Button,
@@ -7,7 +7,6 @@ import {
   CardMedia,
   Divider,
   Drawer,
-  Grid,
   IconButton,
   Stack,
   Typography,
@@ -19,7 +18,6 @@ import { NavLink } from "react-router-dom";
 
 import useAppSelector from "../hooks/useAppSelector";
 import useAppDispatch from "../hooks/useAppDispatch";
-import { isCartVisible } from "../redux/reducers/drawerReducer";
 import {
   CartItem,
   clearCart,
@@ -27,6 +25,7 @@ import {
   increaseAmount,
   removeFromCart,
 } from "../redux/reducers/cartReducer";
+import { isCartVisible } from "../redux/reducers/drawerReducer";
 
 const Cart = () => {
   const toggle = useAppSelector((state) => state.drawerReducer.isCartVisible);
@@ -50,13 +49,14 @@ const Cart = () => {
   const total = cartProducts.reduce((accumulator, currentProduct) => {
     return accumulator + currentProduct.totalPrice;
   }, 0);
+
   return (
     <Drawer
       open={toggle}
       anchor="right"
       PaperProps={{
         sx: {
-          width: 500,
+          width: "100%", // Full width on mobile
         },
       }}
     >
@@ -75,60 +75,62 @@ const Cart = () => {
       </Typography>
       <Divider orientation="horizontal" />
       <Stack>
-        <Grid>
-          {cartProducts.map((product) => {
-            return (
-              <CardContent key={product.product.id} sx={{ display: "flex" }}>
-                <CardMedia
-                  sx={{ borderRadius: "10px" }}
-                  component="img"
-                  height="100"
-                  style={{ width: "100px" }}
-                  image={product.product.images[0]}
-                  alt="product-image"
-                />
-                <Box margin={1} textAlign="left">
-                  <Typography fontWeight="bold" fontSize="10" component="h6">
-                    {product.product.title}
-                  </Typography>
-                  <Typography fontSize="6" component="div">
-                    Category: {product.product.category.name}
-                  </Typography>
-                  <Typography fontSize="bold">
-                    Price: £ {product.product.price}
-                  </Typography>
-                  <Typography fontWeight="bold">
-                    {" "}
-                    Subtotal: £ {product.totalPrice}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleRemoveFromCart(product)}
-                  >
-                    Remove From Cart
-                  </Button>
-                </Box>
-                <CardActions sx={{ display: "flex", flexDirection: "column" }}>
-                  <IconButton
-                    onClick={() => {
-                      handleIncreaseAmount(product);
-                    }}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                  <Typography>{product.quantity}</Typography>
-                  <IconButton
-                    onClick={() => {
-                      handledeccreaseAmount(product);
-                    }}
-                  >
-                    <RemoveIcon />
-                  </IconButton>
-                </CardActions>
-              </CardContent>
-            );
-          })}
-        </Grid>
+        {cartProducts.map((product) => {
+          return (
+            <CardContent
+              key={product.product.id}
+              sx={{ display: "flex", width: "100%" }}
+            >
+              <CardMedia
+                sx={{ borderRadius: "10px" }}
+                component="img"
+                height="100"
+                style={{ width: "100px" }}
+                image={product.product.images[0]}
+                alt="product-image"
+              />
+              <Box margin={1} textAlign="left">
+                <Typography fontWeight="bold" fontSize="10" component="h6">
+                  {product.product.title}
+                </Typography>
+                <Typography fontSize="6" component="div">
+                  Category: {product.product.category.name}
+                </Typography>
+                <Typography fontSize="bold">
+                  Price: £ {product.product.price}
+                </Typography>
+                <Typography fontWeight="bold">
+                  {" "}
+                  Subtotal: £ {product.totalPrice}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => handleRemoveFromCart(product)}
+                >
+                  Remove From Cart
+                </Button>
+              </Box>
+              <CardActions sx={{ display: "flex", flexDirection: "row" }}>
+                <IconButton
+                  onClick={() => {
+                    handledeccreaseAmount(product);
+                  }}
+                >
+                  <RemoveIcon />
+                </IconButton>
+                <Typography>{product.quantity}</Typography>
+
+                <IconButton
+                  onClick={() => {
+                    handleIncreaseAmount(product);
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </CardActions>
+            </CardContent>
+          );
+        })}
       </Stack>
       {cartProducts.length === 0 ? (
         <Box margin={2} textAlign="center">
@@ -173,7 +175,11 @@ const Cart = () => {
         ""
       ) : (
         <NavLink to="/checkout">
-          <Button onClick={clearAllProduct} sx={{ margin: "20px" }} variant="contained">
+          <Button
+            onClick={clearAllProduct}
+            sx={{ margin: "20px" }}
+            variant="contained"
+          >
             Check Out
           </Button>
         </NavLink>
