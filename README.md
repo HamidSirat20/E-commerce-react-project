@@ -35,69 +35,70 @@ During the development of this project, I achieved the following learning outcom
 
 ## Directory Structure
 
-📦src
-┣ 📂components
-┃ ┣ 📜About.tsx
-┃ ┣ 📜Account.tsx
-┃ ┣ 📜Cart.tsx
-┃ ┣ 📜CheckOut.tsx
-┃ ┣ 📜CreateProduct.tsx
-┃ ┣ 📜DashBoard.tsx
-┃ ┣ 📜DeleteProduct.tsx
-┃ ┣ 📜EditProduct.tsx
-┃ ┣ 📜EditProductAdmin.tsx
-┃ ┣ 📜Footer.tsx
-┃ ┣ 📜Login.tsx
-┃ ┣ 📜Logout.tsx
-┃ ┣ 📜NavBar.tsx
-┃ ┣ 📜NavigateCategories.tsx
-┃ ┣ 📜NotFound.tsx
-┃ ┣ 📜ProductDetails.tsx
-┃ ┣ 📜ProductLists.tsx
-┃ ┣ 📜Profile.tsx
-┃ ┣ 📜ProtectedRoute.tsx
-┃ ┣ 📜Signup.tsx
-┃ ┣ 📜SortProducts.tsx
-┃ ┣ 📜UpdateUser.tsx
-┃ ┣ 📜UsersList.tsx
-┃ ┗ 📜WelcomeSlider.tsx
-┣ 📂hooks
-┃ ┣ 📜useAppDispatch.ts
-┃ ┣ 📜useAppSelector.ts
-┃ ┗ 📜useDebounce.ts
-┣ 📂redux
-┃ ┣ 📂reducers
-┃ ┃ ┣ 📜cartReducer.ts
-┃ ┃ ┣ 📜categoryReducer.ts
-┃ ┃ ┣ 📜drawerReducer.ts
-┃ ┃ ┣ 📜productsReducer.ts
-┃ ┃ ┣ 📜sliderReducer.ts
-┃ ┃ ┗ 📜usersReducer.ts
-┃ ┗ 📜store.ts
-┣ 📂routes
-┣ 📂tests
-┃ ┣ 📂data
-┃ ┃ ┣ 📂sliderData
-┃ ┃ ┃ ┣ 📜accessories.jpg
-┃ ┃ ┃ ┣ 📜books.jpg
-┃ ┃ ┃ ┣ 📜clothes.jpg
-┃ ┃ ┃ ┣ 📜electronics.jpg
-┃ ┃ ┃ ┣ 📜furniture.jpg
-┃ ┃ ┃ ┗ 📜sliderData.tsx
-┃ ┃ ┣ 📜category.ts
-┃ ┃ ┗ 📜products.ts
-┃ ┣ 📂reducers
-┃ ┃ ┗ 📜productsReducer.test.ts
-┃ ┗ 📂servers
-┃ ┃ ┗ 📜productServer.ts
-┣ 📂types
-┃ ┣ 📜NewProduct.ts
-┃ ┣ 📜Product.ts
-┃ ┣ 📜UpdateSingleProduct.ts
-┃ ┣ 📜User.ts
-┃ ┗ 📜UserLogin.ts
-┣ 📜App.tsx
-┣ 📜index.tsx
-┣ 📜react-app-env.d.ts
-┣ 📜reportWebVitals.ts
-┗ 📜setupTests.ts
+# src
+
+- [components/](.\src\components)
+  - [About.tsx](.\src\components\About.tsx)
+  - [Account.tsx](.\src\components\Account.tsx)
+  - [Cart.tsx](.\src\components\Cart.tsx)
+  - [CheckOut.tsx](.\src\components\CheckOut.tsx)
+  - [CreateProduct.tsx](.\src\components\CreateProduct.tsx)
+  - [DashBoard.tsx](.\src\components\DashBoard.tsx)
+  - [DeleteProduct.tsx](.\src\components\DeleteProduct.tsx)
+  - [EditProduct.tsx](.\src\components\EditProduct.tsx)
+  - [EditProductAdmin.tsx](.\src\components\EditProductAdmin.tsx)
+  - [Footer.tsx](.\src\components\Footer.tsx)
+  - [Login.tsx](.\src\components\Login.tsx)
+  - [Logout.tsx](.\src\components\Logout.tsx)
+  - [NavBar.tsx](.\src\components\NavBar.tsx)
+  - [NavigateCategories.tsx](.\src\components\NavigateCategories.tsx)
+  - [NotFound.tsx](.\src\components\NotFound.tsx)
+  - [ProductDetails.tsx](.\src\components\ProductDetails.tsx)
+  - [ProductLists.tsx](.\src\components\ProductLists.tsx)
+  - [Profile.tsx](.\src\components\Profile.tsx)
+  - [ProtectedRoute.tsx](.\src\components\ProtectedRoute.tsx)
+  - [Signup.tsx](.\src\components\Signup.tsx)
+  - [SortProducts.tsx](.\src\components\SortProducts.tsx)
+  - [UpdateUser.tsx](.\src\components\UpdateUser.tsx)
+  - [UsersList.tsx](.\src\components\UsersList.tsx)
+  - [WelcomeSlider.tsx](.\src\components\WelcomeSlider.tsx)
+- [hooks/](.\src\hooks)
+  - [useAppDispatch.ts](.\src\hooks\useAppDispatch.ts)
+  - [useAppSelector.ts](.\src\hooks\useAppSelector.ts)
+  - [useDebounce.ts](.\src\hooks\useDebounce.ts)
+- [redux/](.\src\redux)
+  - [reducers/](.\src\redux\reducers)
+    - [cartReducer.ts](.\src\redux\reducers\cartReducer.ts)
+    - [categoryReducer.ts](.\src\redux\reducers\categoryReducer.ts)
+    - [drawerReducer.ts](.\src\redux\reducers\drawerReducer.ts)
+    - [productsReducer.ts](.\src\redux\reducers\productsReducer.ts)
+    - [sliderReducer.ts](.\src\redux\reducers\sliderReducer.ts)
+    - [usersReducer.ts](.\src\redux\reducers\usersReducer.ts)
+  - [store.ts](.\src\redux\store.ts)
+- [routes/](.\src\routes)
+- [tests/](.\src\tests)
+  - [data/](.\src\tests\data)
+    - [sliderData/](.\src\tests\data\sliderData)
+      - [accessories.jpg](.\src\tests\data\sliderData\accessories.jpg)
+      - [books.jpg](.\src\tests\data\sliderData\books.jpg)
+      - [clothes.jpg](.\src\tests\data\sliderData\clothes.jpg)
+      - [electronics.jpg](.\src\tests\data\sliderData\electronics.jpg)
+      - [furniture.jpg](.\src\tests\data\sliderData\furniture.jpg)
+      - [sliderData.tsx](.\src\tests\data\sliderData\sliderData.tsx)
+    - [category.ts](.\src\tests\data\category.ts)
+    - [products.ts](.\src\tests\data\products.ts)
+  - [reducers/](.\src\tests\reducers)
+    - [productsReducer.test.ts](.\src\tests\reducers\productsReducer.test.ts)
+  - [servers/](.\src\tests\servers)
+    - [productServer.ts](.\src\tests\servers\productServer.ts)
+- [types/](.\src\types)
+  - [NewProduct.ts](.\src\types\NewProduct.ts)
+  - [Product.ts](.\src\types\Product.ts)
+  - [UpdateSingleProduct.ts](.\src\types\UpdateSingleProduct.ts)
+  - [User.ts](.\src\types\User.ts)
+  - [UserLogin.ts](.\src\types\UserLogin.ts)
+- [App.tsx](.\src\App.tsx)
+- [index.tsx](.\src\index.tsx)
+- [react-app-env.d.ts](.\src\react-app-env.d.ts)
+- [reportWebVitals.ts](.\src\reportWebVitals.ts)
+- [setupTests.ts](.\src\setupTests.ts)
